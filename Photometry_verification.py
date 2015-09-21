@@ -1,10 +1,13 @@
-from subprocess import check_call
-import os
+from Get_files import check_files
 
-cwd = input()
-os.chdir(cwd)
-filename = input()
-check_call("sex " + filename, shell=True)
+
+while True:
+    cwd = input('Enter Directory:')
+    file_list = check_files(cwd)
+    print(file_list)
+    if file_list != False:
+        break
+# check_call('sex ' + filename, shell=True)
 
 
 

@@ -1,40 +1,24 @@
-import os
-import glob
+from decimal import *
 from subprocess import check_call, CalledProcessError
 
 import numpy as np
+from Get_files import check_files
 from astropy.table import Table
 
 
-def check_files(user_input):
-    """
-    Checks to make sure given directory is a valid directory.  
-    If directory exists, returns list of .fits files.
-    """
-    file_ext = ['*.fit*', '*.FIT*']
-    data_files = []
-    working_dir = os.path.exists(user_input)
-
-    if working_dir:
-        os.chdir(directory)
-        for files in file_ext:
-            data_files += glob.glob(files)
-        print(data_files)
-        return data_files
-    else:
-        print('Invalid directory. Please try again.')
-        return False
-
-
-while True:
-    directory = input('Enter Directory: ')
-    fits_files = check_files(directory)
-    if fits_files != False:
-        break
+# target_data provides a list of targets used to specify RA and Dec for a given .fits file's target object.
 
 target_data = np.loadtxt(fname='/Users/jaredhand/Documents/Automation Project/Automation_Project/target_data.txt',
                          dtype=bytes,
                          delimiter=',')
+
+# initialize fits_files variable as a list of fits files at input directory.
+while True:
+    cwd = input('Enter Directory:')
+    fits_files = check_files(cwd)
+    print(fits_files)
+    if fits_files != False:
+        break
 
 
 def bytes_to_str(list_input):
@@ -86,7 +70,7 @@ def coord_lookup(file1, dict1):
         dict1: dictionary that is used to lookup coordinates via the keyvalue to file1
         
     """
-    i = ''  # 'i' is variable placeholder for file1 after split according to the following conditions:
+    # i = ''  'i' is variable placeholder for file1 after split according to the following conditions:
 
     if 'B_' in file1:
         i = file1.split('B_', 1)[0]
@@ -112,7 +96,7 @@ def coord_lookup(file1, dict1):
             return coord
         except:
             raise
-            return False
+            # return False
     elif no_whitespace.upper() in dict1.keys():
         try:
             print(no_whitespace.upper())
@@ -121,7 +105,7 @@ def coord_lookup(file1, dict1):
             return coord
         except:
             raise
-            return False
+            # return False
     elif no_whitespace.lower() in dict1.keys():
         try:
             print(no_whitespace.lower())
@@ -130,10 +114,14 @@ def coord_lookup(file1, dict1):
             return coord
         except:
             raise
-            return False
+            # return False
 
     else:
         return False
+
+
+# set precision for decimals:
+getcontext().prec = 2
 
 
 def script_loop(files1, dict1, dict2):
@@ -174,12 +162,11 @@ def script_loop(files1, dict1, dict2):
                 break
 
             """
-            Convert ra from str to float to multiply by 15 to give angles in degrees as opposed to hour angles.
-            ra_angles is cast back to str during assignment for consistency with dec_int
+            Convert ra from str to Decimal and multiply by 15 to give angles in degrees as opposed to hour angles.
+            ra_angles is cast back to str during assignment for consistency with dec_int.
             """
-            ra_float = float(ra)
-            ra_angle = str(ra_float * 15.)
-            ra_angle = float(ra_angle)
+            ra_decimal = Decimal(ra)
+            ra_angle = str(ra_decimal * 15)
 
             print(script % (ra_angle, dec, i))
 

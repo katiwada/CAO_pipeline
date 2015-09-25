@@ -3,14 +3,11 @@ from subprocess import check_call, CalledProcessError
 
 import numpy as np
 from Get_files import check_files
+from Target_Data import TargetData
 from astropy.table import Table
 
 
-# target_data provides a list of targets used to specify RA and Dec for a given .fits file's target object.
 
-target_data = np.loadtxt(fname='/Users/jaredhand/Documents/Automation Project/Automation_Project/target_data.txt',
-                         dtype=bytes,
-                         delimiter=',')
 
 # initialize fits_files variable as a list of fits files at input directory.
 while True:
@@ -21,107 +18,12 @@ while True:
         break
 
 
-def bytes_to_str(list_input):
-    """
-    Converts data type of imported array elements from 
-    bytes to string.
-    """
-    for i in range(len(list_input)):
-        x = list_input[i].decode('utf-8')
-        list_input[i] = x
-    return list_input
-
-
-target_name = target_data[:, 0].tolist()
-target_RA = target_data[:, 1].tolist()
-target_dec = target_data[:, 2].tolist()
-
-target_name = bytes_to_str(target_name)
-target_RA = bytes_to_str(target_RA)
-target_dec = bytes_to_str(target_dec)
-
-
-def target_dict(name_list,
-                val_list):
-    """
-    Takes list of names and list of values and returns a 
-    dictionary with with name_list as dictionary key.
-    """
-    result = dict(zip(name_list, val_list))
-    return result
-
-
-RA_dict = target_dict(target_name,
-                      target_RA)
-dec_dict = target_dict(target_name,
-                       target_dec)
+# set precision for decimals:
+getcontext().prec = 2
 
 script = 'solve-field --use-sextractor --overwrite --no-plots --ra %s --dec %s --radius 2 "%s"'
 
-
-def coord_lookup(file1, dict1):
-    """
-    Used in script_loop() to relate parsed file name to a given coordinate. Filename is split according to conditional 
-    below.
-    
-    Parameters:
-        
-        file1: string representing filename that will be compared to keys of dict1
-        dict1: dictionary that is used to lookup coordinates via the keyvalue to file1
-        
-    """
-    # i = ''  'i' is variable placeholder for file1 after split according to the following conditions:
-
-    if 'B_' in file1:
-        i = file1.split('B_', 1)[0]
-    elif 'V_' in file1:
-        i = file1.split('V_', 1)[0]
-    elif 'I_' in file1:
-        i = file1.split('I_', 1)[0]
-    elif 'R_' in file1:
-        i = file1.split('R_', 1)[0]
-    elif '-' in file1:
-        i = file1.split('-', 1)[0]
-    elif '_' in file1:
-        i = file1.split('_', 1)[0]
-    else:
-        return False
-
-    no_whitespace = i.replace(' ', '')
-    if no_whitespace in dict1.keys():
-        try:
-            print(no_whitespace)
-            coord = dict1.get(no_whitespace)
-            print(coord)
-            return coord
-        except:
-            raise
-            # return False
-    elif no_whitespace.upper() in dict1.keys():
-        try:
-            print(no_whitespace.upper())
-            coord = dict1.get(no_whitespace.upper())
-            print(coord)
-            return coord
-        except:
-            raise
-            # return False
-    elif no_whitespace.lower() in dict1.keys():
-        try:
-            print(no_whitespace.lower())
-            coord = dict1.get(no_whitespace.lower())
-            print(coord)
-            return coord
-        except:
-            raise
-            # return False
-
-    else:
-        return False
-
-
-# set precision for decimals:
-getcontext().prec = 2
+td = TargetData()
 
 
 def script_loop(files1, dict1, dict2):
@@ -151,10 +53,10 @@ def script_loop(files1, dict1, dict2):
         """
         try:
             # note that ra is returned in hour angles.
-            ra = coord_lookup(i,
+            ra = td.coord_lookup(i,
                               dict1)
 
-            dec = coord_lookup(i,
+            dec = td.coord_lookup(i,
                                dict2)
 
             if ra == False or dec == False:
@@ -187,9 +89,10 @@ def script_loop(files1, dict1, dict2):
             print("File name: " + i + "  ra: " + ra_angle + "  dec: " + dec)
             raise
 
-
+"""
 print(script_loop(fits_files, RA_dict, dec_dict))
 
 target_table = Table([target_name, target_RA, target_dec],
                      names=('name', 'RA', 'dec'))
 target_table.show_in_browser()
+"""

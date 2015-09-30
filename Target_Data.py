@@ -4,31 +4,28 @@ import numpy as np
 class TargetData:
 
     # target_data provides a list of targets used to specify RA and Dec for a given .fits file's target object.
+    # NOTE: data in this array is of type Byte.
     target_data = np.loadtxt(fname='/Users/jaredhand/Documents/Automation Project/Automation_Project/target_data.txt',
                              dtype=bytes,
                              delimiter=',')
 
     def __init__(self):
+        """
+        Initiates TargetData class
+        """
         pass
 
     def bytes_to_str(self, list_input):
         """
         Converts data type of imported array elements from
         bytes to string.
+
         :type list_input: list
         """
         for i in range(len(list_input)):
             x = list_input[i].decode('utf-8')
             list_input[i] = x
         return list_input
-
-    target_name = target_data[:, 0].tolist()
-    target_RA = target_data[:, 1].tolist()
-    target_dec = target_data[:, 2].tolist()
-
-    target_name = bytes_to_str(target_name)
-    target_RA = bytes_to_str(target_RA)
-    target_dec = bytes_to_str(target_dec)
 
     def target_dict(self, name_list, val_list):
         """
@@ -41,14 +38,9 @@ class TargetData:
         result = dict(zip(name_list, val_list))
         return result
 
-    RA_dict = target_dict(target_name,
-                          target_RA)
-    dec_dict = target_dict(target_name,
-                           target_dec)
-
     def coord_lookup(self, file1, dict1):
         """
-        Used in script_loop() to relate parsed file name to a given coordinate. Filename is split according to conditional
+        Used in script_loop() to relate parsed file name to a given coordinate. Filename is split according to conditionals
         below.
 
         :type file1: string representing filename that will be compared to keys of dict1
@@ -72,6 +64,9 @@ class TargetData:
             return False
 
         no_whitespace = i.replace(' ', '')
+
+        # This portion of code has a general except clause for each if/elif statement for debugging purposes.
+        # Final code will take into consideration different error types and handle them accordingly.
         if no_whitespace in dict1.keys():
             try:
                 print(no_whitespace)

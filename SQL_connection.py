@@ -1,5 +1,10 @@
 from pymysql import connect, ProgrammingError
 
+"""
+There will be a class for writing or reading each table in the database 'research_phot'.  Currently there is only one
+table called file_status.
+"""
+
 
 class Connection(object):
     """

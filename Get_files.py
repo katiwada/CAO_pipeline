@@ -15,6 +15,9 @@ def check_files(user_input):
         os.chdir(user_input)
         for files in file_ext:
             data_files += glob.glob(files)
+        if not data_files:
+            print('Input directory contains no .fit(s) or .FIT(S) files.  Please enter another directory.')
+            return False
         print(data_files)
         return data_files
     else:

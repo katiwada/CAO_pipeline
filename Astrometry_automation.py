@@ -1,5 +1,6 @@
 from decimal import *
-from subprocess import check_call, CalledProcessError
+from subprocess import Popen, CalledProcessError
+import resource
 
 from Get_files import check_files
 from Target_Data import TargetData
@@ -89,7 +90,11 @@ def script_loop(script1, files1, dict1, dict2):
 
             print(script1 % (ra_angle, dec, i))
 
-            check_call([script1 % (ra_angle, dec, i)], shell=True)
+            proc = Popen([script1 % (ra_angle, dec, i)], shell=True)
+            proc.wait()
+            info = resource.getrusage(resource.RUSAGE_CHILDREN)
+            if float(info[1]) > 4.0:
+                proc.terminate()
 
             print('Success for file ' + i)
         except AttributeError:

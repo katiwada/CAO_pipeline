@@ -2,13 +2,14 @@ from decimal import *
 from subprocess import Popen, CalledProcessError
 import resource
 
+import psutil
 from Get_files import check_files
 from Target_Data import TargetData
 
 # set precision for decimal objects to 2 decimal points.
 getcontext().prec = 2
 # Script used in check_call to run astrometry.net as a process.
-script = 'solve-field --use-sextractor --overwrite --no-plots --ra %s --dec %s --radius 2 "%s"'
+script = 'solve-field --use-sextractor --overwrite --no-plots --ra %s --dec %s --radius 15 "%s"'
 
 # initialize fits_files variable as a list of fits files at input directory.
 # makes use of methods defined in Get_files.py
@@ -92,9 +93,16 @@ def script_loop(script1, files1, dict1, dict2):
 
             proc = Popen([script1 % (ra_angle, dec, i)], shell=True)
             proc.wait()
-            info = resource.getrusage(resource.RUSAGE_CHILDREN)
-            if float(info[1]) > 4.0:
-                proc.terminate()
+            proc_list = psutil.pids()
+            for pid in proc_list:
+                p = psutil.Process(pid)
+                print(p.name())
+                print(p.cpu_times())
+                if p.name() == 'astrometry-engine':
+                    break
+            while p.status() == 'running':
+                if p.cpu_times()[0] > 5.:
+                    proc.kill()
 
             print('Success for file ' + i)
         except AttributeError:

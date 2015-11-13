@@ -1,6 +1,6 @@
 from decimal import *
-from subprocess import Popen, CalledProcessError
-import resource
+from subprocess import Popen, CalledProcessError, TimeoutExpired
+import threading
 
 import psutil
 from Get_files import check_files
@@ -9,7 +9,7 @@ from Target_Data import TargetData
 # set precision for decimal objects to 2 decimal points.
 getcontext().prec = 2
 # Script used in check_call to run astrometry.net as a process.
-script = 'solve-field --use-sextractor --overwrite --no-plots --ra %s --dec %s --radius 15 "%s"'
+script = 'solve-field --use-sextractor --overwrite --no-plots --ra %s --dec %s --radius 5 "%s"'
 
 # initialize fits_files variable as a list of fits files at input directory.
 # makes use of methods defined in Get_files.py
@@ -82,27 +82,17 @@ def script_loop(script1, files1, dict1, dict2):
                 print('Coordinate lookup error.  Check to see if target exists in target_data.txt.')
                 break
 
-            """
-            Convert ra from str to Decimal and multiply by 15 to give angles in degrees as opposed to hour angles.
-            ra_angles is cast back to str during assignment for consistency with dec_int.
-            """
+            # Convert ra from str to Decimal and multiply by 15 to give angles in degrees as opposed to hour angles.
+            # ra_angles is cast back to str during assignment for consistency with dec_int.
+
             ra_decimal = Decimal(ra)
             ra_angle = str(ra_decimal * 15)
 
             print(script1 % (ra_angle, dec, i))
 
             proc = Popen([script1 % (ra_angle, dec, i)], shell=True)
-            proc.wait()
-            proc_list = psutil.pids()
-            for pid in proc_list:
-                p = psutil.Process(pid)
-                print(p.name())
-                print(p.cpu_times())
-                if p.name() == 'astrometry-engine':
-                    break
-            while p.status() == 'running':
-                if p.cpu_times()[0] > 5.:
-                    proc.kill()
+            wait = threading.Thread(target=proc.wait, args=(10,))
+            wait.start()
 
             print('Success for file ' + i)
         except AttributeError:
@@ -114,6 +104,8 @@ def script_loop(script1, files1, dict1, dict2):
         except CalledProcessError:
             print("CallProcessError for File name: " + i + "  ra: " + ra_angle + "  dec: " + dec +
                   ".  Please check installation of astrometry.net.")
+        except TimeoutExpired:
+            print("File name: " + i + "  ra: " + ra_angle + "  dec: " + dec + " terminated after 10 seconds.")
         except:
             print("File name: " + i + "  ra: " + ra_angle + "  dec: " + dec)
             raise

@@ -2,8 +2,7 @@ from decimal import *
 from subprocess import Popen, CalledProcessError, TimeoutExpired
 import threading
 
-import psutil
-from Get_files import check_files
+from Get_files import check_files, rm_spaces
 from Target_Data import TargetData
 
 # set precision for decimal objects to 2 decimal points.
@@ -16,8 +15,9 @@ script = 'solve-field --use-sextractor --overwrite --no-plots --ra %s --dec %s -
 while True:
     cwd = input('Enter Directory:')
     fits_files = check_files(cwd)
-    print(fits_files)
-    if fits_files != False:
+    no_space_files = rm_spaces(fits_files)
+    print(no_space_files)
+    if no_space_files != False:
         break
 
 # Instantiate TargetData class.

@@ -91,7 +91,7 @@ def script_loop(script1, files1, dict1, dict2):
             print(script1 % (ra_angle, dec, i))
 
             proc = Popen([script1 % (ra_angle, dec, i)], shell=True)
-            wait = threading.Thread(target=proc.wait, args=(10,))
+            wait = threading.Thread(target=proc.wait, args=(30,))
             wait.start()
 
             print('Success for file ' + i)

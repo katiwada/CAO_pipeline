@@ -63,7 +63,8 @@ class TargetData:
         else:
             return False
 
-        no_whitespace = i.replace(' ', '')
+        rm_underscore = i.replace('_', '')
+        no_whitespace = rm_underscore.replace(' ', '')
 
         # This portion of code has a general except clause for each if/elif statement for debugging purposes.
         # Final code will take into consideration different error types and handle them accordingly.

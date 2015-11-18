@@ -42,28 +42,4 @@ for i in glob.glob('*.cat'):
                 '/Users/jaredhand/Documents/photometry/catalogs/' + i)
 
 
-"""
-def get_files():
-
-    fits = []
-    FITS = []
-    try:
-        for file in Path('/Users/jaredhand/Documents/photometry/data_in/').glob('/**/*.FIT*'):
-            if 'FIT.gz' in file:
-                sp.check_call('gunzip ' + file, shell=True)
-            FITS.append(file)
-
-        for file in Path('/Users/jaredhand/Documents/photometry/data_in/').glob('/**/*.fit*'):
-            if 'fit.gz' in file:
-                sp.check_call('gunzip ' + file, shell=True)
-            fits.append(file)
-
-    except sp.CalledProcessError:
-        raise
-
-    return fits + FITS
-"""
-
-
-
 

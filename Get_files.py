@@ -53,10 +53,9 @@ def get_files():
     try:
         if glob.glob('*.gz*'):
             check_call('gunzip *FIT.gz', shell=True)
+            fits = glob.glob('*.fit*')
+            FITS = glob.glob('*.FIT*')
+            no_space = rm_spaces(list1=fits + FITS)
+            return no_space
     except CalledProcessError:
         raise
-
-    fits = glob.glob('*.fit*')
-    FITS = glob.glob('*.FIT*')
-    no_space = rm_spaces(list1=fits + FITS)
-    return no_space

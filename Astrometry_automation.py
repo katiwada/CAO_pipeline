@@ -15,9 +15,9 @@ script = 'solve-field --use-sextractor --overwrite --no-plots --ra %s --dec %s -
 while True:
     cwd = input('Enter Directory:')
     fits_files = check_files(cwd)
-    no_space_files = rm_spaces(fits_files)
-    print(no_space_files)
-    if no_space_files != False:
+    no_space = rm_spaces(fits_files)
+    print(no_space)
+    if no_space != False:
         break
 
 # Instantiate TargetData class.

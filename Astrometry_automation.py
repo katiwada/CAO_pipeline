@@ -1,7 +1,8 @@
 from decimal import *
-from subprocess import Popen, CalledProcessError, TimeoutExpired
+from subprocess import Popen, CalledProcessError
 import threading
 
+import config
 from Get_files import check_files, rm_spaces
 from Target_Data import TargetData
 
@@ -13,7 +14,7 @@ script = 'solve-field --use-sextractor --overwrite --no-plots --ra %s --dec %s -
 # initialize fits_files variable as a list of fits files at input directory.
 # makes use of methods defined in Get_files.py
 while True:
-    cwd = input('Enter Directory:')
+    cwd = config.astrometry_directory
     fits_files = check_files(cwd)
     no_space = rm_spaces(fits_files)
     print(no_space)
@@ -104,8 +105,8 @@ def script_loop(script1, files1, dict1, dict2):
         except CalledProcessError:
             print("CallProcessError for File name: " + i + "  ra: " + ra_angle + "  dec: " + dec +
                   ".  Please check installation of astrometry.net.")
-        except TimeoutExpired:
-            print("File name: " + i + "  ra: " + ra_angle + "  dec: " + dec + " terminated after 10 seconds.")
+        #except TimeoutExpired:
+        #    print("File name: " + i + "  ra: " + ra_angle + "  dec: " + dec + " terminated after 10 seconds.")
         except:
             print("File name: " + i + "  ra: " + ra_angle + "  dec: " + dec)
             raise

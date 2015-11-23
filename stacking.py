@@ -2,17 +2,25 @@ import subprocess as sp
 import threading
 import os
 import glob
+import shutil
 
 from astropy.io import fits
 
-from Get_files import check_files, rm_spaces
+import config
 
-directory = input('Enter directory')
-os.chdir(directory)
+#
+for new in glob.glob('*.new'):
+    shutil.move(config.astrometry_directory + new,
+                config.stacking_directory + new)
 
-script = 'swarp s%'
+os.chdir(config.stacking_directory)
+
+# script for swarp
+script = 'swarp -IMAGEOUT_NAME s% s%'
+# grab all astrometretized files
 astro_files = glob.glob('*.new')
 
+# empty lists that will be populated with file names that share filters
 b_filt = []
 v_filt = []
 r_filt = []
@@ -55,10 +63,11 @@ for filt in filt_list:
 files_for_script = [b, v, r, i]
 
 for j in files_for_script:
-    swarp = threading.thread(target=sp.check_call, args=([script, j], None, None, None, True))
+    cat_name = files_for_script[0]
+    swarp = threading.Thread(target=sp.check_call,
+                             args=([script % (cat_name, j)], None, None, None, True))
     swarp.start()
 
-
-
-
-
+for stacked in glob.glob('*.fit*'):
+    shutil.move(config.stacking_directory + stacked,
+                config.sex_directory + stacked)

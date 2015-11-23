@@ -5,8 +5,10 @@ import shutil
 
 import Get_files
 
+import config
+
 # Set current working directory to /Users/jaredhand/Documents/photometry/data_in/
-os.chdir('/Users/jaredhand/Documents/photometry/data_in/')
+os.chdir(config.sex_directory)
 # str for sextractor script
 script = 'sex -CATALOG_NAME %s %s'
 files = Get_files.get_files()
@@ -37,9 +39,9 @@ def sex_call(list1):
 
 print(os.getcwd())
 sex_call(list1=files)
-for i in glob.glob('*.cat'):
-    shutil.move('/Users/jaredhand/Documents/photometry/data_in/' + i,
-                '/Users/jaredhand/Documents/photometry/catalogs/' + i)
+for sexed in glob.glob('*.cat'):
+    shutil.move(config.sex_directory + sexed,
+                config.finished_catalogs + sexed)
 
 
 

@@ -53,6 +53,12 @@ def get_files():
     try:
         if glob.glob('*.gz*'):
             check_call('gunzip *FIT.gz', shell=True)
+            check_call('gunzip *fit.gz', shell=True)
+            fits = glob.glob('*.fit*')
+            FITS = glob.glob('*.FIT*')
+            no_space = rm_spaces(list1=fits + FITS)
+            return no_space
+        elif glob.glob('*.fit*') or glob.glob('*FIT'):
             fits = glob.glob('*.fit*')
             FITS = glob.glob('*.FIT*')
             no_space = rm_spaces(list1=fits + FITS)

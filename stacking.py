@@ -1,5 +1,4 @@
 import subprocess as sp
-import threading
 import os
 import glob
 import shutil
@@ -16,7 +15,7 @@ for new in glob.glob('*.new'):
 os.chdir(config.stacking_directory)
 
 # script for swarp
-script = 'swarp -IMAGEOUT_NAME %s @%s'
+script = 'swarp -IMAGEOUT_NAME %s -WEIGHTOUT_NAME %s @%s'
 # grab all astrometretized files
 astro_files = glob.glob('*.new')
 
@@ -45,66 +44,35 @@ b = ''
 v = ''
 r = ''
 i = ''
-"""
-for filt in filt_list:
-    if filt == b_filt:
-        for k in filt:
-            b += ' ' + k
-    if filt == v_filt:
-        for k in filt:
-            v += ' ' + k
-    if filt == r_filt:
-        for k in filt:
-            r += ' ' + k
-    if filt == i_filt:
-        for k in filt:
-            i += ' ' + k
-"""
+
 for filt in filt_list:
     cat_name = ''
     try:
         if filt == b_filt:
-            cat_name = b_filt[0]
+            cat_name = b_filt[0].split('.', 1)[0]
         elif filt == v_filt:
-            cat_name = v_filt[0]
+            cat_name = v_filt[0].split('.', 1)[0]
         elif filt == r_filt:
-            cat_name = r_filt[0]
+            cat_name = r_filt[0].split('.', 1)[0]
         elif filt == i_filt:
-            cat_name = i_filt[0]
-
+            cat_name = i_filt[0].split('.', 1)[0]
         fits_list = open(cat_name + '_list.txt', 'a')
         for file in filt:
             fits_list.write(file)
             fits_list.write('\n')
         fits_list.close()
-        j_script = script % (cat_name, cat_name + '_list.txt')
-        swarp = threading.Thread(target=sp.check_call,
-                                 args=(j_script, None, None, None, True))
-        swarp.start()
+        j_script = script % (cat_name + '.fits', cat_name + '.weight.fits', cat_name + '_list.txt')
+        sp.check_call(args=j_script, shell=True)
     except:
         raise
-#iles_for_script = [b, v, r, i]
-"""
-for j in files_for_script:
-    cat_name = ''
-    try:
-        if j == b:
-            cat_name = b_filt[0]
-        elif j == v:
-            cat_name = v_filt[0]
-        elif j == r:
-            cat_name = r_filt[0]
-        elif j == i:
-            cat_name = i_filt[0]
-        fits_list = open(cat_name, 'a')
 
-        j_script = script % (cat_name, j)
-        swarp = threading.Thread(target=sp.check_call,
-                                 args=(j_script, None, None, None, True))
-        swarp.start()
-    except:
-        raise
-"""
 for stacked in glob.glob('*.fit*'):
-    shutil.move(config.stacking_directory + stacked,
-                config.sex_directory + stacked)
+    if stacked in glob.glob('*.weight.fit*'):
+        shutil.move(config.stacking_directory + stacked,
+                    config.stacking_directory + '/weights/' + stacked)
+    else:
+        shutil.move(config.stacking_directory + stacked,
+                    config.sex_directory + stacked)
+
+for file in glob.glob('*._list.txt*'):
+    os.remove(config.stacking_directory + file)

@@ -46,7 +46,7 @@ for sexed in glob.glob('*.cat'):
                 config.finished_catalogs + sexed)
 
 # move stacked fits to finished stacked directory
-for stacked in glob.glob('*'):
+for stacked in glob.glob('*.fit*'):
     shutil.move(config.sex_directory + stacked,
                 config.finished_stacked + stacked)
 

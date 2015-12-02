@@ -1,5 +1,5 @@
 from decimal import *
-from subprocess import CalledProcessError, Popen
+from subprocess import CalledProcessError, Popen, check_call, TimeoutExpired
 import threading
 import os
 import glob
@@ -91,10 +91,10 @@ def script_loop(script1, files1, dict1, dict2):
             ra_angle = str(ra_decimal * 15)
 
             # print(script1 % (ra_angle, dec, i))
-
-            proc = Popen([script1 % (ra_angle, dec, i)], shell=True, timeout=30)
-            wait = threading.Thread(target=proc.wait, args=(30,))
-            wait.start()
+            check_call([script1 % (ra_angle, dec, i)], shell=True, timeout=30)
+            # proc = Popen([script1 % (ra_angle, dec, i)], shell=True)
+            # wait = threading.Thread(target=proc.wait, args=(30,))
+            # wait.start()
 
             print('Success for file ' + i)
         except AttributeError:
@@ -106,8 +106,8 @@ def script_loop(script1, files1, dict1, dict2):
         except CalledProcessError:
             print("CallProcessError for File name: " + i + "  ra: " + ra_angle + "  dec: " + dec +
                   ".  Please check installation of astrometry.net.")
-        #except TimeoutExpired:
-        #    print("File name: " + i + "  ra: " + ra_angle + "  dec: " + dec + " terminated after 10 seconds.")
+        except TimeoutExpired:
+            print("File name: " + i + "  ra: " + ra_angle + "  dec: " + dec + " terminated after 10 seconds.")
         except:
             print("File name: " + i + "  ra: " + ra_angle + "  dec: " + dec)
             raise

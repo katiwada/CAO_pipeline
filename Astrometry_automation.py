@@ -1,6 +1,8 @@
 from decimal import *
-from subprocess import Popen, CalledProcessError
+from subprocess import CalledProcessError, Popen
 import threading
+import os
+import glob
 
 import config
 from Get_files import check_files, rm_spaces
@@ -85,13 +87,12 @@ def script_loop(script1, files1, dict1, dict2):
 
             # Convert ra from str to Decimal and multiply by 15 to give angles in degrees as opposed to hour angles.
             # ra_angles is cast back to str during assignment for consistency with dec_int.
-
             ra_decimal = Decimal(ra)
             ra_angle = str(ra_decimal * 15)
 
-            print(script1 % (ra_angle, dec, i))
+            # print(script1 % (ra_angle, dec, i))
 
-            proc = Popen([script1 % (ra_angle, dec, i)], shell=True)
+            proc = Popen([script1 % (ra_angle, dec, i)], shell=True, timeout=30)
             wait = threading.Thread(target=proc.wait, args=(30,))
             wait.start()
 
@@ -111,13 +112,13 @@ def script_loop(script1, files1, dict1, dict2):
             print("File name: " + i + "  ra: " + ra_angle + "  dec: " + dec)
             raise
 
-
 print(script_loop(script, fits_files, RA_dict, dec_dict))
 
+# Remove clutter created by astrometry.net
+new = glob.glob('*.new*')
+for file in glob.glob('*'):
+    if file in new:
+        pass
+    else:
+        os.remove(config.astrometry_directory + file)
 
-"""
-from astropy.table import Table
-target_table = Table([target_name, target_RA, target_dec],
-                     names=('name', 'RA', 'dec'))
-target_table.show_in_browser()
-"""

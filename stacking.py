@@ -25,6 +25,7 @@ v_filt = []
 r_filt = []
 i_filt = []
 
+# put respective astrometretized files into lists based on filter type
 for file in astro_files:
     data = fits.open(file)
     filter_type = data[0].header['FILTER']
@@ -39,12 +40,10 @@ for file in astro_files:
     else:
         print('No filter type detected.')
 
+# list of filter lists
 filt_list = [b_filt, v_filt, r_filt, i_filt]
-b = ''
-v = ''
-r = ''
-i = ''
 
+# run Swarp on a list of fits with corresponding filter types
 for filt in filt_list:
     cat_name = ''
     try:
@@ -57,6 +56,7 @@ for filt in filt_list:
         elif filt == i_filt:
             cat_name = i_filt[0].split('.', 1)[0]
         fits_list = open(cat_name + '_list.txt', 'a')
+        # create list used by swarp
         for file in filt:
             fits_list.write(file)
             fits_list.write('\n')
@@ -66,6 +66,7 @@ for filt in filt_list:
     except:
         raise
 
+# move stacked fits and weights to respective directories
 for stacked in glob.glob('*.fit*'):
     if stacked in glob.glob('*.weight.fit*'):
         shutil.move(config.stacking_directory + stacked,
@@ -74,5 +75,6 @@ for stacked in glob.glob('*.fit*'):
         shutil.move(config.stacking_directory + stacked,
                     config.sex_directory + stacked)
 
+# remove lists used by swarp
 for file in glob.glob('*._list.txt*'):
     os.remove(config.stacking_directory + file)

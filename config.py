@@ -1,6 +1,7 @@
-# list of directories used
+# list of directories used in pipeline
 
-astrometry_directory = '/Users/jaredhand/Documents/astrometry/'
-stacking_directory = '/Users/jaredhand/Documents/stacking/'
-sex_directory = '/Users/jaredhand/Documents/photometry/data_in/'
-finished_catalogs = '/Users/jaredhand/Documents/photometry/catalogs/'
+astrometry_directory = '/Users/jaredhand/Documents/pipeline/astrometry/'
+stacking_directory = '/Users/jaredhand/Documents/pipeline/stacking/'
+sex_directory = '/Users/jaredhand/Documents/pipeline/photometry/data_in/'
+finished_catalogs = '/Users/jaredhand/Documents/pipeline/photometry/catalogs/'
+finished_stacked = '/Users/jaredhand/Documents/pipeline/photometry/stacked/'

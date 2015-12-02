@@ -21,7 +21,7 @@ def sex_call(list1):
     :param list1: list of fits/FITS files in cwd
     :return: False if subprocess fails, otherwise returns True
     """
-    print(os.getcwd())
+
     if os.getcwd() != '/Users/jaredhand/Documents/photometry/data_in':
         print('Check current directory.')
         return False
@@ -37,11 +37,16 @@ def sex_call(list1):
             raise
     return True
 
-print(os.getcwd())
+# sex fits in cwd
 sex_call(list1=files)
+
+# move catalogs to catalog directory
 for sexed in glob.glob('*.cat'):
     shutil.move(config.sex_directory + sexed,
                 config.finished_catalogs + sexed)
 
-
+# move stacked fits to finished stacked directory
+for stacked in glob.glob('*'):
+    shutil.move(config.sex_directory + stacked,
+                config.finished_stacked + stacked)
 

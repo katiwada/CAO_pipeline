@@ -40,8 +40,8 @@ class TargetData:
 
     def coord_lookup(self, file1, dict1):
         """
-        Used in script_loop() to relate parsed file name to a given coordinate. Filename is split according to conditionals
-        below.
+        Used in script_loop() to relate parsed file name to a given coordinate. Filename is split according to
+        conditionals below.
 
         :type file1: string representing filename that will be compared to keys of dict1
         :type dict1: dictionary that is used to lookup coordinates via the keyvalue to file1

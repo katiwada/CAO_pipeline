@@ -1,8 +1,8 @@
 from decimal import *
-from subprocess import CalledProcessError, Popen, check_call, TimeoutExpired
-import threading
+from subprocess import CalledProcessError, check_call, TimeoutExpired
 import os
 import glob
+import shutil
 
 import config
 from Get_files import check_files, rm_spaces
@@ -60,6 +60,8 @@ def script_loop(script1, files1, dict1, dict2):
         
     """
     script_len = len(script1)
+    timeoutlist_file = open(files1[0].split('.', 1)[0] + '_timeout.txt', 'a')
+    timeout_time = 30
 
     # Following conditional determines whether script1 is a valid script for use in this program.
     if '--ra' not in script1:
@@ -90,12 +92,14 @@ def script_loop(script1, files1, dict1, dict2):
             ra_decimal = Decimal(ra)
             ra_angle = str(ra_decimal * 15)
 
-            # print(script1 % (ra_angle, dec, i))
-            check_call([script1 % (ra_angle, dec, i)], shell=True, timeout=30)
-            # proc = Popen([script1 % (ra_angle, dec, i)], shell=True)
-            # wait = threading.Thread(target=proc.wait, args=(30,))
-            # wait.start()
+            check_call([script1 % (ra_angle, dec, i)], shell=True, timeout=timeout_time)
 
+            # for eventual threading implementation
+            """
+            proc = Popen([script1 % (ra_angle, dec, i)], shell=True)
+            wait = threading.Thread(target=proc.wait, args=(30,))
+            wait.start()
+            """
             print('Success for file ' + i)
         except AttributeError:
             print('AttributeError: Filename: ' + i + '. Check to see if target exists in target_data.txt')
@@ -104,13 +108,16 @@ def script_loop(script1, files1, dict1, dict2):
             print('Halted')
             break
         except CalledProcessError:
-            print("CallProcessError for File name: " + i + "  ra: " + ra_angle + "  dec: " + dec +
-                  ".  Please check installation of astrometry.net.")
+            print('CallProcessError for File name: ' + i + '  ra: ' + ra_angle + '  dec: ' + dec +
+                  '.  Please check installation of astrometry.net.')
         except TimeoutExpired:
-            print("File name: " + i + "  ra: " + ra_angle + "  dec: " + dec + " terminated after 10 seconds.")
+            # populate timeout list with file names of files that timed out during astrometrization
+            timeoutlist_file.write(i + ' terminated after ' + str(timeout_time) + ' seconds.')
+            timeoutlist_file.write('\n')
         except:
-            print("File name: " + i + "  ra: " + ra_angle + "  dec: " + dec)
+            print('File name: ' + i + '  ra: ' + ra_angle + '  dec: ' + dec)
             raise
+    timeoutlist_file.close()
 
 print(script_loop(script, fits_files, RA_dict, dec_dict))
 
@@ -122,3 +129,7 @@ for file in glob.glob('*'):
     else:
         os.remove(config.astrometry_directory + file)
 
+# move timeout lists
+for file in glob.glob('*_timeout.txt*'):
+    shutil.move(config.astrometry_directory,
+                config.astrometry_directory + 'timeout_lists/')

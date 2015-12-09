@@ -97,3 +97,7 @@ for stacked in glob.glob('*.fit*'):
 # remove lists used by swarp
 for file in glob.glob('*_list.txt*'):
     os.remove(config.stacking_directory + file)
+
+# remove *.new files created by astrometry.net
+for file in glob.glob('*.new'):
+    os.remove(config.stacking_directory + file)

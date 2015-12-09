@@ -15,7 +15,10 @@ def check_files(user_input):
     if working_dir:
         os.chdir(user_input)
         if glob.glob('*.gz*'):
-            check_call('gunzip *FIT.gz', shell=True)
+            try:
+                check_call('gunzip *.gz', shell=True)
+            except CalledProcessError:
+                pass
         for files in file_ext:
             data_files += glob.glob(files)
         if not data_files:

@@ -4,7 +4,6 @@ import glob
 import shutil
 
 import Get_files
-
 import config
 
 # Set current working directory to /Users/jaredhand/Documents/photometry/data_in/
@@ -21,11 +20,7 @@ def sex_call(list1):
     :param list1: list of fits/FITS files in cwd
     :return: False if subprocess fails, otherwise returns True
     """
-
-    if os.getcwd() != '/Users/jaredhand/Documents/photometry/data_in':
-        print('Check current directory.')
-        return False
-    elif not list1:
+    if not list1:
         print('No .fit or .FIT files in /data_in folder.')
         return False
 

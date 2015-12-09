@@ -19,55 +19,74 @@ script = 'swarp -IMAGEOUT_NAME %s -WEIGHTOUT_NAME %s @%s'
 # grab all astrometretized files
 astro_files = glob.glob('*.new')
 
-# empty lists that will be populated with file names that share filters
-b_filt = []
-v_filt = []
-r_filt = []
-i_filt = []
+# empty dictionary that will be populated with file names that share filters
+filt_dict = {}
 
-# put respective astrometretized files into lists based on filter type
+# put respective astrometretized files into lists in filt_dict where key is filter type
 for file in astro_files:
     data = fits.open(file)
     filter_type = data[0].header['FILTER']
-    if filter_type == 'B':
-        b_filt.append(file)
-    elif filter_type == 'V':
-        v_filt.append(file)
-    elif filter_type == 'R':
-        r_filt.append(file)
-    elif filter_type == 'I':
-        i_filt.append(file)
-    else:
-        print('No filter type detected.')
+    if filter_type not in filt_dict.keys():
+        key = filter_type
+        filt_dict[filter_type] = list()
+        filt_dict[key].append(file)
+    elif filter_type in filt_dict.keys():
+        key = filter_type
+        filt_dict[key].append(file)
+    data.close()
+print(filt_dict)
 
-# list of filter lists
-filt_list = [b_filt, v_filt, r_filt, i_filt]
+obs_dict = {}
 
-# run Swarp on a list of fits with corresponding filter types
-for filt in filt_list:
-    cat_name = ''
-    try:
-        if filt == b_filt:
-            cat_name = b_filt[0].split('.', 1)[0]
-        elif filt == v_filt:
-            cat_name = v_filt[0].split('.', 1)[0]
-        elif filt == r_filt:
-            cat_name = r_filt[0].split('.', 1)[0]
-        elif filt == i_filt:
-            cat_name = i_filt[0].split('.', 1)[0]
-        fits_list = open(cat_name + '_list.txt', 'a')
-        # create list used by swarp
-        for file in filt:
-            fits_list.write(file)
-            fits_list.write('\n')
-        fits_list.close()
-        j_script = script % (cat_name + '.fits', cat_name + '.weight.fits', cat_name + '_list.txt')
-        sp.check_call(args=j_script, shell=True)
-    except:
-        raise
+# create dictionary with key values for dates of observation and values as files with corresponding date of observation
+for filt in filt_dict.values():
+    for file in filt:
+        data = fits.open(file)
+        date_time_obs = data[0].header['DATE-OBS']
+        date_obs = date_time_obs.split('T', 1)[0]
+        if date_obs not in obs_dict.keys():
+            key = date_obs
+            obs_dict[date_obs] = list()
+            obs_dict[key].append(file)
+        elif date_obs in obs_dict.keys():
+            key = date_obs
+            obs_dict[key].append(file)
+        data.close()
+print(obs_dict)
+
+# Run swarp on sets corresponding to unique dates and filters for all files in astro_files
+# empty_set = set()
+for filt_files in filt_dict.values():
+    for date_files in obs_dict.values():
+        cat_name = ''
+        filt_set = set(filt_files)
+        date_set = set(date_files)
+        stack_set = date_set.intersection(filt_set)
+        if len(stack_set) == 0:
+            pass
+        else:
+            try:
+                stack_list = list(stack_set)
+                data = fits.open(stack_list[0])
+                obs_date_time = data[0].header['DATE-OBS']
+                obs_date = obs_date_time.split('T', 1)[0]
+                cat_name = stack_list[0].split('.', 1)[0] + '_' + obs_date
+                data.close()
+
+                # create list used by swarp
+                fits_list = open(cat_name + '_list.txt', 'a')
+                for file in stack_list:
+                    fits_list.write(file)
+                    fits_list.write('\n')
+                fits_list.close()
+                swarp_script = script % (cat_name + '.fits', cat_name + '.weight.fits', cat_name + '_list.txt')
+                sp.check_call(args=swarp_script, shell=True)
+            except:
+                raise
 
 # move stacked fits and weights to respective directories
 for stacked in glob.glob('*.fit*'):
+
     if stacked in glob.glob('*.weight.fit*'):
         shutil.move(config.stacking_directory + stacked,
                     config.stacking_directory + '/weights/' + stacked)
@@ -76,5 +95,5 @@ for stacked in glob.glob('*.fit*'):
                     config.sex_directory + stacked)
 
 # remove lists used by swarp
-for file in glob.glob('*._list.txt*'):
+for file in glob.glob('*_list.txt*'):
     os.remove(config.stacking_directory + file)

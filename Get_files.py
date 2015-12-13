@@ -38,13 +38,17 @@ def rm_spaces(list1):
     :param list1: input list where are whitespace is replaced with '_'
     :return: modified list1
     """
-    for i in range(len(list1)):
-        if ' ' in list1[i]:
-            j = list1[i].replace(' ', '_')
-            os.rename(list1[i], j)
-            list1.pop(i)
-            list1.insert(i, j)
-    return list1
+    if len(list1) > 0:
+        for i in range(len(list1)):
+            if ' ' in list1[i]:
+                j = list1[i].replace(' ', '_')
+                os.rename(list1[i], j)
+                list1.pop(i)
+                list1.insert(i, j)
+        return list1
+    else:
+        print('Directory contains no .fit(s) or .FIT(s) files.')
+        return False
 
 
 def get_files():
@@ -61,7 +65,10 @@ def get_files():
             FITS = glob.glob('*.FIT*')
             no_space = rm_spaces(list1=fits + FITS)
             return no_space
-        elif glob.glob('*.fit*') or glob.glob('*FIT'):
+    except CalledProcessError:
+        raise
+    try:
+        if glob.glob('*.fit*') or glob.glob('*FIT'):
             fits = glob.glob('*.fit*')
             FITS = glob.glob('*.FIT*')
             no_space = rm_spaces(list1=fits + FITS)

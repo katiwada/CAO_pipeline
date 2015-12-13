@@ -132,4 +132,4 @@ for file in glob.glob('*'):
 # move timeout lists
 for file in glob.glob('*_timeout.txt*'):
     shutil.move(config.astrometry_directory,
-                config.astrometry_directory + 'timeout_lists/')
+                config.pipeline_root + 'timeout_lists/')

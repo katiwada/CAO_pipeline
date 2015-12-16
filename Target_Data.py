@@ -47,8 +47,9 @@ class TargetData:
         :type dict1: dictionary that is used to lookup coordinates via the keyvalue to file1
 
         """
-
-        if 'B_' in file1:
+        if '-' in file1:
+            i = file1.split('-', 1)[0]
+        elif 'B_' in file1:
             i = file1.split('B_', 1)[0]
         elif 'V_' in file1:
             i = file1.split('V_', 1)[0]
@@ -56,10 +57,9 @@ class TargetData:
             i = file1.split('I_', 1)[0]
         elif 'R_' in file1:
             i = file1.split('R_', 1)[0]
-        elif '-' in file1:
-            i = file1.split('-', 1)[0]
         elif '_' in file1:
             i = file1.split('_', 1)[0]
+
         else:
             return False
 
@@ -70,27 +70,21 @@ class TargetData:
         # Final code will take into consideration different error types and handle them accordingly.
         if no_whitespace in dict1.keys():
             try:
-                print(no_whitespace)
                 coord = dict1.get(no_whitespace)
-                print(coord)
                 return coord
             except:
                 raise
                 # return False
         elif no_whitespace.upper() in dict1.keys():
             try:
-                print(no_whitespace.upper())
                 coord = dict1.get(no_whitespace.upper())
-                print(coord)
                 return coord
             except:
                 raise
                 # return False
         elif no_whitespace.lower() in dict1.keys():
             try:
-                print(no_whitespace.lower())
                 coord = dict1.get(no_whitespace.lower())
-                print(coord)
                 return coord
             except:
                 raise

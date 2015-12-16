@@ -2,6 +2,8 @@ import os
 import glob
 from subprocess import CalledProcessError, check_call
 
+from astropy.io import fits
+
 
 def check_files(user_input):
     """
@@ -75,3 +77,85 @@ def get_files():
             return no_space
     except CalledProcessError:
         raise
+
+
+def subdir_adddate(dir):
+    """
+    This is a script to take 'DATE-OBS' from fit file header and tack it onto the end of the file name.
+    The script will recursively go through subdirectories of directory 'dir' from the top down.
+
+    :param dir: directory where script is to be run
+    :return:
+    """
+    if not os.path.isdir(dir):
+        print('Directory parameter is not a directory.')
+        return False
+    for root, dirs, files in os.walk(dir):
+        for directory in dirs:
+            os.chdir(root + '/' + directory + '/')
+            for f in glob.glob('*.fit*'):
+                try:
+                    data = fits.open(f)
+                    date_time_obs = data[0].header['DATE-OBS']
+                    date_obs = date_time_obs.split('T', 1)[0]
+                    fname1 = f.split('.', 1)[0]
+                    fname2 = f.split('.', 1)[1]
+                    newfilename = fname1 + '_' + date_obs + '.' + fname2
+                    os.rename(root + directory + '/' + f,
+                              root + directory + '/' + newfilename)
+                except:
+                    raise
+            for f in glob.glob('*.FIT*'):
+                try:
+                    data = fits.open(f)
+                    date_time_obs = data[0].header['DATE-OBS']
+                    date_obs = date_time_obs.split('T', 1)[0]
+                    fname1 = f.split('.', 1)[0]
+                    fname2 = f.split('.', 1)[1]
+                    newfilename = fname1 + '_' + date_obs + '.' + fname2
+                    os.rename(root + directory + '/' + f,
+                              root + directory + '/' + newfilename)
+                except:
+                    raise
+    return True
+
+
+def subdir_chgname(dir, old, new):
+    """
+    This script checks to see if the string 'old' is in a filename in given directory.  If so, old is replaced
+    with new.  Recursively checks subdirectories of 'dir' from the top down.
+
+    :param dir: Directory where script is to be run
+    :param old: old character string in file name
+    :param new: character string to replace old in file name
+    :return:
+    """
+    oldstr = str(old)
+    newstr = str(new)
+    if not os.path.isdir(dir):
+        print('Directory parameter is not a directory.')
+        return False
+    for root, dirs, files in os.walk(dir):
+        for directory in dirs:
+            os.chdir(root + '/' + directory + '/')
+            for f in glob.glob('*.fit*'):
+                try:
+                    if oldstr in f:
+                        newfilename = f.replace(oldstr, newstr)
+                        os.rename(root + directory + '/' + f,
+                                  root + directory + '/' + newfilename)
+
+                except:
+                    raise
+            for f in glob.glob('*.FIT*'):
+                try:
+                    if oldstr in f:
+                        newfilename = f.replace(oldstr, newstr)
+                        os.rename(root + directory + '/' + f,
+                                  root + directory + '/' + newfilename)
+                except:
+                    raise
+    return True
+
+# subdir_chgname(dir='/Users/jaredhand/Documents/bllac/2010/', old='BL Lacertae', new='BL Lac')
+# subdir_adddate(dir='/Users/jaredhand/Documents/bllac/2010/')

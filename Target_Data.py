@@ -1,6 +1,7 @@
 import numpy as np
 import config
 
+
 class TargetData:
 
     # target_data provides a list of targets used to specify RA and Dec for a given .fits file's target object.

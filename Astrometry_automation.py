@@ -61,7 +61,7 @@ def script_loop(script1, files1, dict1, dict2):
     """
     script_len = len(script1)
     timeoutlist_file = open(files1[0].split('.', 1)[0] + '_timeout.txt', 'a')
-    timeout_time = 30
+    timeout_time = 90
 
     # Following conditional determines whether script1 is a valid script for use in this program.
     if '--ra' not in script1:
@@ -121,6 +121,11 @@ def script_loop(script1, files1, dict1, dict2):
 
 print(script_loop(script, fits_files, RA_dict, dec_dict))
 
+# move timeout lists
+for file in glob.glob('*_timeout.txt*'):
+    shutil.move(config.astrometry_directory,
+                config.pipeline_root + 'timeout_lists/')
+
 # Remove clutter created by astrometry.net
 new = glob.glob('*.new*')
 for file in glob.glob('*'):
@@ -129,7 +134,4 @@ for file in glob.glob('*'):
     else:
         os.remove(config.astrometry_directory + file)
 
-# move timeout lists
-for file in glob.glob('*_timeout.txt*'):
-    shutil.move(config.astrometry_directory,
-                config.pipeline_root + 'timeout_lists/')
+

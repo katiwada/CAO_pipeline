@@ -55,8 +55,8 @@ def script_loop(script1, files1, dict1, dict2):
         script1: String passed through the check_call method from subprocess.  Must satisfy certain conditions listed
             below.
         files1: input list of all files in a directory in which to run astrometry.net
-        dict1: used as a dictionary to determine ra a file in files1
-        dict2: used as a dictionary to determine dec from a file files1
+        dict1: used as a dictionary to determine ra from some file in files1
+        dict2: used as a dictionary to determine dec from some file in files1
         
     """
     script_len = len(script1)

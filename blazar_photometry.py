@@ -1,5 +1,6 @@
 import numpy as np
 import os
+import glob
 from astropy.io import fits
 import matplotlib.pyplot as plt
 
@@ -119,7 +120,8 @@ def find_source(cat):
             closest = delta
             closest_source = k + 1
     source_flux = float(np.copy(cat_data[2].data[closest_source - 1][6]))
-    return [closest_source, source_flux]
+    source_fluxerr = float(np.copy(cat_data[2].data[closest_source - 1][7]))
+    return [closest_source, source_flux, source_fluxerr]
 
 
 def mag_fit(ref_source, cat, filt):
@@ -128,7 +130,8 @@ def mag_fit(ref_source, cat, filt):
     :param ref_source: array containing reference stars
     :param cat: Input catalog from pipeline
     :param filt: Filter of stacked file.  Must be 'B', 'V', 'R' or 'I'.
-    :return: [linear fit coefficients, reference aperture flux, reference magnitude, flux error, magnitude error]
+    :return: [catalog name, source information, reference star information, linear fit coefficients,
+              reference aperture flux, reference magnitude, flux error, magnitude error]
     """
     ref_list = find_ref(ref_source=ref_source, cat=cat)
     os.chdir(config.blazar_photometry)
@@ -162,12 +165,49 @@ def mag_fit(ref_source, cat, filt):
     cat_data.close()
 
     linear_fit = np.polyfit(x=ref_flux, y=ref_mag, deg=1)
-    return [[cat, source, ref_list], [linear_fit, ref_flux, ref_mag, ref_fluxerr, ref_magerr]]
+    return [cat, source, ref_list, linear_fit, ref_flux, ref_mag, ref_fluxerr, ref_magerr]
 
 
 best_fit = mag_fit(ref_source=bllac_ref, cat='BL_Lac-001B_2010-11-02_2010-11-02.cat', filt='B')
 print(best_fit)
 
+# User specifies filename information
+os.chdir(config.blazar_photometry)
+cat_list = glob.glob('*.cat')
+filter_input = input('Enter filter: ')
+ref_source_input = input('Enter ref_source: ')
+year_input = input('Enter year: ')
+
+# determine which array to use as reference source
+global ref_source_data
+if ref_source_input == 'bllac_ref':
+    ref_source_data = np.copy(bllac_ref)
+elif ref_source_input == 'mrk501_ref':
+    ref_source_data = np.copy(bllac_ref)
+
+# loop to create .txt files containing all data(verbose_file) and data for plotting(data_file)
+for catalog in cat_list:
+    verbose_file = open(ref_source_input + '_' + filter_input + '_' + year_input + '_verbose.txt', 'a')
+    data_file = open(ref_source_input + '_' + filter_input + '_' + year_input + '.txt', 'a')
+    cat_date_list = mag_fit(ref_source=ref_source_data, cat=catalog, filt=filter_input)
+
+    verbose_file.write(cat_date_list)
+    verbose_file.write('\n')
+    verbose_file.close()
+
+    cat_name = cat_date_list[0]
+    source_info = cat_date_list[1]
+    source_position = source_info[0]
+    source_flux_data = source_info[1]
+    source_fluxerr_data = source_info[2]
+    linear_fit = cat_date_list[3]
+    source_mag = linear_fit[0] * source_flux_data + linear_fit[1]
+    source_magerr = linear_fit[0] * source_fluxerr_data + linear_fit[1]
+    data_file.write(filter_input + ',' + source_mag + ',' + source_magerr + ',')
+    data_file.write('\n')
+    data_file.close()
+
+"""
 x_list = np.linspace(0, 5000, 10000)
 y_list = []
 stuff = best_fit[1]
@@ -178,9 +218,11 @@ for i in x_list:
 thing = best_fit[0]
 that = thing[1]
 source_flux = that[1]
-source_mag = source_flux*line_fit[0] + line_fit[1]
+source_mag = source_flux * line_fit[0] + line_fit[1]
 
 plt.scatter(stuff[1], stuff[2], c='r')
 plt.scatter(source_flux, source_mag, c='g')
 plt.plot(x_list, y_list)
 plt.show()
+"""
+

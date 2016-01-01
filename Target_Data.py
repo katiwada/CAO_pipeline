@@ -48,48 +48,19 @@ class TargetData:
         :type dict1: dictionary that is used to lookup coordinates via the keyvalue to file1
 
         """
-        if '-' in file1:
-            i = file1.split('-', 1)[0]
-        elif 'B_' in file1:
-            i = file1.split('B_', 1)[0]
-        elif 'V_' in file1:
-            i = file1.split('V_', 1)[0]
-        elif 'I_' in file1:
-            i = file1.split('I_', 1)[0]
-        elif 'R_' in file1:
-            i = file1.split('R_', 1)[0]
-        elif '_' in file1:
-            i = file1.split('_', 1)[0]
-
-        else:
-            return False
-
-        rm_underscore = i.replace('_', '')
-        no_whitespace = rm_underscore.replace(' ', '')
-
-        # This portion of code has a general except clause for each if/elif statement for debugging purposes.
-        # Final code will take into consideration different error types and handle them accordingly.
-        if no_whitespace in dict1.keys():
-            try:
-                coord = dict1.get(no_whitespace)
-                return coord
-            except:
-                raise
-                # return False
-        elif no_whitespace.upper() in dict1.keys():
-            try:
-                coord = dict1.get(no_whitespace.upper())
-                return coord
-            except:
-                raise
-                # return False
-        elif no_whitespace.lower() in dict1.keys():
-            try:
-                coord = dict1.get(no_whitespace.lower())
-                return coord
-            except:
-                raise
-                # return False
-
-        else:
-            return False
+        i = ''
+        file1_rmus = file1.replace('_', '', 1)
+        file1_nows = file1_rmus.replace(' ', '', 1)
+        for key in dict1.keys():
+            if key.lower() in file1.lower():
+                i = key
+            elif key.lower() in file1_rmus.lower():
+                i = key
+            elif key.lower() in file1_nows.lower():
+                i = key
+            else:
+                pass
+        print(i)
+        coord = dict1.get(i)
+        print(coord)
+        return coord

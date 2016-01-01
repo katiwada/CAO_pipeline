@@ -29,12 +29,12 @@ bllac_ref = np.array([[330.689384, 42.276598, 14.52, 0.04, 12.78, 0.04, 11.93, 0
                       [330.650184, 42.281650, 16.26, 0.05, 15.44, 0.03, 14.88, 0.05, 14.34, 0.10]],
                      dtype=float)
 
-mrk501_ref = np.array([[253.441109, 39.735895, 13.55, 0.03, 12.61, 0.02, 12.11, 0.02, 0, 0],
-                       [253.368909, 39.783250, 14.10, 0.03, 13.23, 0.02, 12.79, 0.02, 0, 0],
-                       [253.381853, 39.788248, 15.98, 0.04, 15.24, 0.02, 14.80, 0.02, 0, 0],
-                       [253.445300, 39.719267, 16.05, 0.05, 15.30, 0.02, 14.96, 0.02, 0, 0],
-                       [253.493675, 39.800534, 16.27, 0.04, 15.51, 0.02, 15.08, 0.02, 0, 0],
-                       [253.487848, 39.759787, 16.82, 0.05, 15.67, 0.04, 14.99, 0.04, 0, 0]],
+mrk501_ref = np.array([[253.441109, 39.735895, 13.55, 0.03, 12.61, 0.02, 12.11, 0.02, False, False],
+                       [253.368909, 39.783250, 14.10, 0.03, 13.23, 0.02, 12.79, 0.02, False, False],
+                       [253.381853, 39.788248, 15.98, 0.04, 15.24, 0.02, 14.80, 0.02, False, False],
+                       [253.445300, 39.719267, 16.05, 0.05, 15.30, 0.02, 14.96, 0.02, False, False],
+                       [253.493675, 39.800534, 16.27, 0.04, 15.51, 0.02, 15.08, 0.02, False, False],
+                       [253.487848, 39.759787, 16.82, 0.05, 15.67, 0.04, 14.99, 0.04, False, False]],
                       dtype=float)
 
 
@@ -56,8 +56,8 @@ def haversine(ra1, dec1, ra2, dec2, radius=1):
 
     delta_ra = abs(rad_ra2 - rad_ra1)
     delta_dec = abs(rad_dec2 - rad_dec1)
-    x = np.sqrt((np.sin(delta_dec / 2)**2) + np.cos(rad_ra1) * np.cos(rad_ra2) * (np.sin(delta_ra / 2)**2))
-    return np.arcsin(x) * 2 * radius
+    value = np.sqrt((np.sin(delta_dec / 2)**2) + np.cos(rad_ra1) * np.cos(rad_ra2) * (np.sin(delta_ra / 2)**2))
+    return np.arcsin(value) * 2 * radius
 
 
 def find_ref(ref_source, cat):
@@ -78,14 +78,12 @@ def find_ref(ref_source, cat):
         closest = 1e10
         ref_ra = np.copy(ref_source[ref_star][0])
         ref_dec = np.copy(ref_source[ref_star][1])
-        # print(ref_star, source_ra, source_dec)
+        print(ref_ra, ref_dec)
         for i in range(cat_len):
             cat_ra = np.copy(cat_data[2].data[i][34])
             cat_dec = np.copy(cat_data[2].data[i][35])
-            # print(i, cat_ra, cat_dec)
             delta = haversine(ref_ra, ref_dec, cat_ra, cat_dec)
             if delta < closest:
-                # print(i, delta)
                 closest = delta
                 closest_source = i + 1
         ref_flux = float(np.copy(cat_data[2].data[closest_source - 1][6]))
@@ -102,7 +100,6 @@ def find_source(cat):
     """
     source_ra = float(td.coord_lookup(cat, RA_dict)) * 15.0
     source_dec = float(td.coord_lookup(cat, dec_dict))
-    print(source_ra, source_dec)
     os.chdir(config.blazar_photometry)
     try:
         cat_data = fits.open(cat)
@@ -113,7 +110,7 @@ def find_source(cat):
     for k in range(cat_len):
         cat_ra = np.copy(cat_data[2].data[k][34])
         cat_dec = np.copy(cat_data[2].data[k][35])
-        # print(i, cat_ra, cat_dec)
+        # print(k, cat_ra, cat_dec)
         delta = haversine(source_ra, source_dec, cat_ra, cat_dec)
         if delta < closest:
             # print(k, delta)
@@ -140,36 +137,40 @@ def mag_fit(ref_source, cat, filt):
     source = find_source(cat=cat)
 
     if filt == 'B':
-        ref_mag = ref_source[:, 2]
-        ref_magerr = ref_source[:, 3]
+        ref_mag = ref_source[:, 2].tolist()
+        ref_magerr = ref_source[:, 3].tolist()
     elif filt == 'V':
-        ref_mag = ref_source[:, 4]
-        ref_magerr = ref_source[:, 5]
+        ref_mag = ref_source[:, 4].tolist()
+        ref_magerr = ref_source[:, 5].tolist()
     elif filt == 'R':
-        ref_mag = ref_source[:, 6]
-        ref_magerr = ref_source[:, 7]
+        ref_mag = ref_source[:, 6].tolist()
+        ref_magerr = ref_source[:, 7].tolist()
     elif filt == 'I':
-        ref_mag = ref_source[:, 8]
-        ref_magerr = ref_source[:, 9]
+        ref_mag = ref_source[:, 8].tolist()
+        ref_magerr = ref_source[:, 9].tolist()
     else:
         print('Invalid filter.  Must be B, V, R or I.')
         return False
+
+    # for h in range(len(ref_mag)):
+    #    if not ref_mag[h]:
+
     try:
         cat_data = fits.open(cat)
     except:
         raise
     for j in range(len(ref_list)):
         ref_number = ref_list[j][0]
+        # if False in ref_source[j]:
+        #     pass
+        # else:
         ref_flux.append(cat_data[2].data[ref_number - 1][6])
         ref_fluxerr.append(cat_data[2].data[ref_number - 1][7])
+    # mjd = cat_data[3].header['MJD-OBS']
     cat_data.close()
-
+    print(ref_list)
     linear_fit = np.polyfit(x=ref_flux, y=ref_mag, deg=1)
     return [cat, source, ref_list, linear_fit, ref_flux, ref_mag, ref_fluxerr, ref_magerr]
-
-
-best_fit = mag_fit(ref_source=bllac_ref, cat='BL_Lac-001B_2010-11-02_2010-11-02.cat', filt='B')
-print(best_fit)
 
 # User specifies filename information
 os.chdir(config.blazar_photometry)
@@ -183,29 +184,33 @@ global ref_source_data
 if ref_source_input == 'bllac_ref':
     ref_source_data = np.copy(bllac_ref)
 elif ref_source_input == 'mrk501_ref':
-    ref_source_data = np.copy(bllac_ref)
+    ref_source_data = np.copy(mrk501_ref)
 
 # loop to create .txt files containing all data(verbose_file) and data for plotting(data_file)
 for catalog in cat_list:
+    os.chdir(config.blazar_photometry)
     verbose_file = open(ref_source_input + '_' + filter_input + '_' + year_input + '_verbose.txt', 'a')
     data_file = open(ref_source_input + '_' + filter_input + '_' + year_input + '.txt', 'a')
-    cat_date_list = mag_fit(ref_source=ref_source_data, cat=catalog, filt=filter_input)
+    cat_data_list = mag_fit(ref_source=ref_source_data, cat=catalog, filt=filter_input)
 
-    verbose_file.write(cat_date_list)
+    for x in cat_data_list:
+        verbose_file.write(str(x))
+        verbose_file.write(',')
     verbose_file.write('\n')
     verbose_file.close()
 
-    cat_name = cat_date_list[0]
-    source_info = cat_date_list[1]
+    cat_name = cat_data_list[0]
+    source_info = cat_data_list[1]
     source_position = source_info[0]
     source_flux_data = source_info[1]
     source_fluxerr_data = source_info[2]
-    linear_fit = cat_date_list[3]
+    linear_fit = cat_data_list[3]
     source_mag = linear_fit[0] * source_flux_data + linear_fit[1]
-    source_magerr = linear_fit[0] * source_fluxerr_data + linear_fit[1]
-    data_file.write(filter_input + ',' + source_mag + ',' + source_magerr + ',')
+    source_magerr = linear_fit[0] * source_fluxerr_data
+    data_file.write(cat_name + ',' + str(filter_input) + ',' + str(source_mag) + ',' + str(source_magerr) + ',')
     data_file.write('\n')
     data_file.close()
+
 
 """
 x_list = np.linspace(0, 5000, 10000)

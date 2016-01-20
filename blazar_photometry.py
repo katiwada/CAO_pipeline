@@ -22,19 +22,19 @@ target_dec = td.bytes_to_str(target_dec)
 RA_dict = td.target_dict(target_name, target_RA)
 dec_dict = td.target_dict(target_name, target_dec)
 
-# 0:ra, 1:dec, 2:b, 3:b_err, 4:v, 5:v_err, 6:r, 7:r_err, 8:i, 9:i_err
-bllac_ref = np.array([[330.689384, 42.276598, 14.52, 0.04, 12.78, 0.04, 11.93, 0.05, 11.09, 0.06],
-                      [330.666992, 42.286056, 15.09, 0.03, 14.19, 0.03, 13.69, 0.03, 13.23, 0.04],
-                      [330.636125, 42.279881, 15.68, 0.03, 14.31, 0.05, 13.60, 0.03, 12.93, 0.04],
-                      [330.650184, 42.281650, 16.26, 0.05, 15.44, 0.03, 14.88, 0.05, 14.34, 0.10]],
+# 0:UID 1:ra, 2:dec, 3:b, 4:b_err, 5:v, 6:v_err, 7:r, 8:r_err, 9:i, 10:i_err
+bllac_ref = np.array([[0, 330.689384, 42.276598, 14.52, 0.04, 12.78, 0.04, 11.93, 0.05, 11.09, 0.06],
+                      [1, 330.666992, 42.286056, 15.09, 0.03, 14.19, 0.03, 13.69, 0.03, 13.23, 0.04],
+                      [2, 330.636125, 42.279881, 15.68, 0.03, 14.31, 0.05, 13.60, 0.03, 12.93, 0.04],
+                      [3, 330.650184, 42.281650, 16.26, 0.05, 15.44, 0.03, 14.88, 0.05, 14.34, 0.10]],
                      dtype=float)
 
-mrk501_ref = np.array([[253.441109, 39.735895, 13.55, 0.03, 12.61, 0.02, 12.11, 0.02, False, False],
-                       [253.368909, 39.783250, 14.10, 0.03, 13.23, 0.02, 12.79, 0.02, False, False],
-                       [253.381853, 39.788248, 15.98, 0.04, 15.24, 0.02, 14.80, 0.02, False, False],
-                       [253.445300, 39.719267, 16.05, 0.05, 15.30, 0.02, 14.96, 0.02, False, False],
-                       [253.493675, 39.800534, 16.27, 0.04, 15.51, 0.02, 15.08, 0.02, False, False],
-                       [253.487848, 39.759787, 16.82, 0.05, 15.67, 0.04, 14.99, 0.04, False, False]],
+mrk501_ref = np.array([[0, 253.441109, 39.735895, 13.55, 0.03, 12.61, 0.02, 12.11, 0.02, 1., 0.01],
+                       [1, 253.368909, 39.783250, 14.10, 0.03, 13.23, 0.02, 12.79, 0.02, 999., 999.],
+                       [2, 253.381853, 39.788248, 15.98, 0.04, 15.24, 0.02, 14.80, 0.02, 999., 999.],
+                       [3, 253.445300, 39.719267, 16.05, 0.05, 15.30, 0.02, 14.96, 0.02, 999., 999.],
+                       [4, 253.493675, 39.800534, 16.27, 0.04, 15.51, 0.02, 15.08, 0.02, 999., 999.],
+                       [5, 253.487848, 39.759787, 16.82, 0.05, 15.67, 0.04, 14.99, 0.04, 999., 999.]],
                       dtype=float)
 
 
@@ -76,9 +76,10 @@ def find_ref(ref_source, cat):
     ref_list = []
     for ref_star in range(len(ref_source)):
         closest = 1e10
-        ref_ra = np.copy(ref_source[ref_star][0])
-        ref_dec = np.copy(ref_source[ref_star][1])
-        print(ref_ra, ref_dec)
+        uid = float(np.copy(ref_source[ref_star][0]))
+        ref_ra = np.copy(ref_source[ref_star][1])
+        ref_dec = np.copy(ref_source[ref_star][2])
+        # print(ref_ra, ref_dec)
         for i in range(cat_len):
             cat_ra = np.copy(cat_data[2].data[i][34])
             cat_dec = np.copy(cat_data[2].data[i][35])
@@ -87,7 +88,8 @@ def find_ref(ref_source, cat):
                 closest = delta
                 closest_source = i + 1
         ref_flux = float(np.copy(cat_data[2].data[closest_source - 1][6]))
-        ref_data = [closest_source, ref_flux]
+        ref_fluxerr = float(np.copy(cat_data[2].data[closest_source - 1][7]))
+        ref_data = [uid, closest_source, ref_flux, ref_fluxerr]
         ref_list.append(ref_data)
     return ref_list
 
@@ -137,40 +139,35 @@ def mag_fit(ref_source, cat, filt):
     source = find_source(cat=cat)
 
     if filt == 'B':
-        ref_mag = ref_source[:, 2].tolist()
-        ref_magerr = ref_source[:, 3].tolist()
+        ref_mag = ref_source[:, 3].tolist()
+        ref_magerr = ref_source[:, 4].tolist()
     elif filt == 'V':
-        ref_mag = ref_source[:, 4].tolist()
-        ref_magerr = ref_source[:, 5].tolist()
+        ref_mag = ref_source[:, 5].tolist()
+        ref_magerr = ref_source[:, 6].tolist()
     elif filt == 'R':
-        ref_mag = ref_source[:, 6].tolist()
-        ref_magerr = ref_source[:, 7].tolist()
+        ref_mag = ref_source[:, 7].tolist()
+        ref_magerr = ref_source[:, 8].tolist()
     elif filt == 'I':
-        ref_mag = ref_source[:, 8].tolist()
-        ref_magerr = ref_source[:, 9].tolist()
+        ref_mag = ref_source[:, 9].tolist()
+        ref_magerr = ref_source[:, 10].tolist()
     else:
         print('Invalid filter.  Must be B, V, R or I.')
         return False
 
-    # for h in range(len(ref_mag)):
-    #    if not ref_mag[h]:
+    # Remove all values of 999.0 in ref_mag and ref_magerr
+    while 999. in ref_mag:
+        ref_mag.remove(999.)
+    while 999. in ref_magerr:
+        ref_magerr.remove(999.)
+    # Uses uid to populate correct flux for each ref source whose mag or magerr is not 999.0
+    for s in ref_mag:
+        for t in ref_list:
+            if s == t[0]:
+                ref_flux.append(t[2])
+                ref_fluxerr.append((t[3]))
 
-    try:
-        cat_data = fits.open(cat)
-    except:
-        raise
-    for j in range(len(ref_list)):
-        ref_number = ref_list[j][0]
-        # if False in ref_source[j]:
-        #     pass
-        # else:
-        ref_flux.append(cat_data[2].data[ref_number - 1][6])
-        ref_fluxerr.append(cat_data[2].data[ref_number - 1][7])
-    # mjd = cat_data[3].header['MJD-OBS']
-    cat_data.close()
-    print(ref_list)
-    linear_fit = np.polyfit(x=ref_flux, y=ref_mag, deg=1)
-    return [cat, source, ref_list, linear_fit, ref_flux, ref_mag, ref_fluxerr, ref_magerr]
+    lin_fit = np.polyfit(x=ref_flux, y=ref_mag, deg=1)
+    return [cat, source, ref_list, lin_fit, ref_flux, ref_mag, ref_fluxerr, ref_magerr]
 
 # User specifies filename information
 os.chdir(config.blazar_photometry)

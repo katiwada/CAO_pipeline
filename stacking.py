@@ -15,7 +15,7 @@ for new in glob.glob('*.new'):
 os.chdir(config.stacking_directory)
 
 # script for swarp
-script = 'swarp -IMAGEOUT_NAME %s -WEIGHTOUT_NAME %s @%s'
+script = 'swarp -COPY_KEYWORDS \'FILTER\',\'DATE-OBS\' -IMAGEOUT_NAME %s -WEIGHTOUT_NAME %s @%s'
 # grab all astrometretized files
 astro_files = glob.glob('*.new')
 

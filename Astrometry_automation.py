@@ -1,9 +1,5 @@
 from decimal import *
 from subprocess import CalledProcessError, check_call, TimeoutExpired
-import os
-import glob
-import shutil
-
 import config
 from Get_files import check_files, rm_spaces
 from Target_Data import TargetData
@@ -82,24 +78,15 @@ def script_loop(script1, files1, dict1, dict2):
             # note that ra is returned in hour angles.
             ra = td.coord_lookup(i, dict1)
             dec = td.coord_lookup(i, dict2)
-
             if ra == False or dec == False:
                 print('Coordinate lookup error.  Check to see if target exists in target_data.txt.')
                 break
-
             # Convert ra from str to Decimal and multiply by 15 to give angles in degrees as opposed to hour angles.
             # ra_angles is cast back to str during assignment for consistency with dec_int.
             ra_decimal = Decimal(ra)
             ra_angle = str(ra_decimal * 15)
 
             check_call([script1 % (ra_angle, dec, i)], shell=True, timeout=timeout_time)
-
-            # for eventual threading implementation
-            """
-            proc = Popen([script1 % (ra_angle, dec, i)], shell=True)
-            wait = threading.Thread(target=proc.wait, args=(30,))
-            wait.start()
-            """
             print('Success for file ' + i)
         except AttributeError:
             print('AttributeError: Filename: ' + i + '. Check to see if target exists in target_data.txt')
@@ -120,18 +107,4 @@ def script_loop(script1, files1, dict1, dict2):
     timeoutlist_file.close()
 
 print(script_loop(script, fits_files, RA_dict, dec_dict))
-
-# move timeout lists
-for file in glob.glob('*_timeout.txt*'):
-    shutil.move(config.astrometry_directory,
-                config.pipeline_root + 'timeout_lists/')
-
-# Remove clutter created by astrometry.net
-new = glob.glob('*.new*')
-for file in glob.glob('*'):
-    if file in new:
-        pass
-    else:
-        os.remove(config.astrometry_directory + file)
-
 

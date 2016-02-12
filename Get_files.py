@@ -1,7 +1,6 @@
 import os
 import glob
 from subprocess import CalledProcessError, check_call
-
 from astropy.io import fits
 
 

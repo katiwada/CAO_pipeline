@@ -2,15 +2,26 @@ import subprocess as sp
 import os
 import glob
 import shutil
-
 from astropy.io import fits
-
 import config
 
 os.chdir(config.astrometry_directory)
 for new in glob.glob('*.new'):
     shutil.move(config.astrometry_directory + new,
                 config.stacking_directory + new)
+
+# move timeout lists
+for file in glob.glob('*_timeout.txt*'):
+    shutil.move(config.astrometry_directory,
+                config.pipeline_root + 'timeout_lists/')
+
+# Remove clutter created by astrometry.net
+new = glob.glob('*.new*')
+for file in glob.glob('*'):
+    if file in new:
+        pass
+    else:
+        os.remove(config.astrometry_directory + file)
 
 os.chdir(config.stacking_directory)
 

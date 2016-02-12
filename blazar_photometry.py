@@ -2,10 +2,10 @@ import numpy as np
 import os
 import glob
 from astropy.io import fits
-import matplotlib.pyplot as plt
 
 import Target_Data
 import config
+import read_fits
 
 td = Target_Data.TargetData()
 
@@ -172,7 +172,6 @@ def mag_fit(ref_source, cat, filt):
 # User specifies filename information
 os.chdir(config.blazar_photometry)
 cat_list = glob.glob('*.cat')
-filter_input = input('Enter filter: ')
 ref_source_input = input('Enter ref_source: ')
 year_input = input('Enter year: ')
 
@@ -186,6 +185,10 @@ elif ref_source_input == 'mrk501_ref':
 # loop to create .txt files containing all data(verbose_file) and data for plotting(data_file)
 for catalog in cat_list:
     os.chdir(config.blazar_photometry)
+    head_info = read_fits.decode_fitshead(filt1=catalog)
+    filter_input = read_fits.get_filter(head_info)
+    # dateobs = read_fits.get_dateobs(head_info)
+    # mjd_date = read_fits.get_mjd(head_info)
     verbose_file = open(ref_source_input + '_' + filter_input + '_' + year_input + '_verbose.txt', 'a')
     data_file = open(ref_source_input + '_' + filter_input + '_' + year_input + '.txt', 'a')
     cat_data_list = mag_fit(ref_source=ref_source_data, cat=catalog, filt=filter_input)
@@ -207,24 +210,3 @@ for catalog in cat_list:
     data_file.write(cat_name + ',' + str(filter_input) + ',' + str(source_mag) + ',' + str(source_magerr) + ',')
     data_file.write('\n')
     data_file.close()
-
-
-"""
-x_list = np.linspace(0, 5000, 10000)
-y_list = []
-stuff = best_fit[1]
-line_fit = stuff[0]
-for i in x_list:
-    y_list.append(i * line_fit[0] + line_fit[1])
-
-thing = best_fit[0]
-that = thing[1]
-source_flux = that[1]
-source_mag = source_flux * line_fit[0] + line_fit[1]
-
-plt.scatter(stuff[1], stuff[2], c='r')
-plt.scatter(source_flux, source_mag, c='g')
-plt.plot(x_list, y_list)
-plt.show()
-"""
-

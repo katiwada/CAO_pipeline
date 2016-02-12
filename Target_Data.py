@@ -60,7 +60,5 @@ class TargetData:
                 i = key
             else:
                 pass
-        print(i)
         coord = dict1.get(i)
-        print(coord)
         return coord

@@ -5,6 +5,24 @@ import shutil
 import Get_files
 import config
 
+# move stacked fits and weights to respective directories
+for stacked in glob.glob('*.fit*'):
+
+    if stacked in glob.glob('*.weight.fit*'):
+        shutil.move(config.stacking_directory + stacked,
+                    config.stacking_directory + '/weights/' + stacked)
+    else:
+        shutil.move(config.stacking_directory + stacked,
+                    config.sex_directory + stacked)
+
+# remove lists used by swarp
+for file in glob.glob('*_list.txt*'):
+    os.remove(config.stacking_directory + file)
+
+# remove *.new files created by astrometry.net
+for file in glob.glob('*.new'):
+    os.remove(config.stacking_directory + file)
+
 # Set current working directory to /Users/jaredhand/Documents/photometry/data_in/
 os.chdir(config.sex_directory)
 # str for sextractor script

@@ -15,8 +15,7 @@ while True:
     cwd = config.astrometry_directory
     fits_files = check_files(cwd)
     no_space = rm_spaces(fits_files)
-    print(no_space)
-    if no_space != False:
+    if no_space:
         break
 
 # Instantiate TargetData class.

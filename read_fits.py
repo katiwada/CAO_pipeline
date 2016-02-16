@@ -9,10 +9,17 @@ of all header information.  Three functions can be used to extract DATE-OBS, MJD
 accessible when using astropy.io.
 """
 
+# valid filters from data
 valid_filters = ['U', 'V', 'R', 'I']
 
 
 def decode_fitshead(file1, cwd=None):
+    """
+    Decodes header of fits file.
+    :param file1: fits file whose header will be read and decoded
+    :param cwd: specify cwd
+    :return: list of header information from fits
+    """
     if cwd:
         os.chdir(cwd)
     fitsfile = fitsio.read(file1)
@@ -25,6 +32,7 @@ def decode_fitshead(file1, cwd=None):
 
 
 def get_dateobs(list1):
+    # retrieves DATE-OBS from fits header
     for k in list1:
         if 'DATE-OBS' in k:
             first = k.split('=', 1)[1]
@@ -36,6 +44,7 @@ def get_dateobs(list1):
 
 
 def get_filter(list1):
+    # retrieves FILTER from fits header
     for k in list1:
         if 'FILTER' in k:
             first = k.split('=', 1)[1]
@@ -49,6 +58,7 @@ def get_filter(list1):
 
 
 def get_mjd(list1):
+    # retrieves MJD-OBS from fits header
     for k in list1:
         if 'MJD-OBS' in k:
             first = k.split('=', 1)[1]

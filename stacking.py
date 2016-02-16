@@ -45,7 +45,6 @@ for file in astro_files:
         key = filter_type
         filt_dict[key].append(file)
     data.close()
-print(filt_dict)
 
 obs_dict = {}
 
@@ -63,10 +62,8 @@ for filt in filt_dict.values():
             key = date_obs
             obs_dict[key].append(file)
         data.close()
-print(obs_dict)
 
 # Run swarp on sets corresponding to unique dates and filters for all files in astro_files
-# empty_set = set()
 for filt_files in filt_dict.values():
     for date_files in obs_dict.values():
         cat_name = ''
@@ -94,21 +91,3 @@ for filt_files in filt_dict.values():
                 sp.check_call(args=swarp_script, shell=True)
             except:
                 raise
-
-# move stacked fits and weights to respective directories
-for stacked in glob.glob('*.fit*'):
-
-    if stacked in glob.glob('*.weight.fit*'):
-        shutil.move(config.stacking_directory + stacked,
-                    config.stacking_directory + '/weights/' + stacked)
-    else:
-        shutil.move(config.stacking_directory + stacked,
-                    config.sex_directory + stacked)
-
-# remove lists used by swarp
-for file in glob.glob('*_list.txt*'):
-    os.remove(config.stacking_directory + file)
-
-# remove *.new files created by astrometry.net
-for file in glob.glob('*.new'):
-    os.remove(config.stacking_directory + file)

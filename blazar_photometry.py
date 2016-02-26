@@ -165,7 +165,6 @@ def mag_fit(ref_source, cat, filt):
             if s == t[0]:
                 ref_flux.append(t[2])
                 ref_fluxerr.append((t[3]))
-
     lin_fit = np.polyfit(x=ref_flux, y=ref_mag, deg=1)
     return [cat, source, ref_list, lin_fit, ref_flux, ref_mag, ref_fluxerr, ref_magerr]
 

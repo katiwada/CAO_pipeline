@@ -1,41 +1,9 @@
 from decimal import *
 from subprocess import CalledProcessError, check_call, TimeoutExpired
-import config
-from Get_files import check_files, rm_spaces
-from Target_Data import TargetData
-
-# set precision for decimal objects to 2 decimal points.
-getcontext().prec = 2
-# Script used in check_call to run astrometry.net as a process.
-script = 'solve-field --use-sextractor --overwrite --no-plots --ra %s --dec %s --radius 5 "%s"'
-
-# initialize fits_files variable as a list of fits files at input directory.
-# makes use of methods defined in Get_files.py
-while True:
-    cwd = config.astrometry_directory
-    fits_files = check_files(cwd)
-    no_space = rm_spaces(fits_files)
-    if no_space:
-        break
-
-# Instantiate TargetData class.
-td = TargetData()
-
-# All values from target_data are Byte data type.
-target_name = td.target_data[:, 0].tolist()
-target_RA = td.target_data[:, 1].tolist()
-target_dec = td.target_data[:, 2].tolist()
-
-# Converts Byte data in each list to string data type.
-target_name = td.bytes_to_str(target_name)
-target_RA = td.bytes_to_str(target_RA)
-target_dec = td.bytes_to_str(target_dec)
-
-RA_dict = td.target_dict(target_name, target_RA)
-dec_dict = td.target_dict(target_name, target_dec)
+import Target_Data
 
 
-def script_loop(script1, files1, dict1, dict2):
+def script_loop(files1, dict1, dict2):
     """
     Prints input list of files.  Loops through each i in files1 and performs coord_lookup with i
     with both dict1 and dict2.  Coord_lookup is a method in the Target_Data class.  Right ascension is determined
@@ -44,19 +12,20 @@ def script_loop(script1, files1, dict1, dict2):
     
         solve-field --use-sextractor --overwrite --downsample <int> --ra <degrees>
         --dec <degrees> --radius <arcminutes> 'filename'
-        
-    Parameters:
 
-        script1: String passed through the check_call method from subprocess.  Must satisfy certain conditions listed
-            below.
-        files1: input list of all files in a directory in which to run astrometry.net
-        dict1: used as a dictionary to determine ra from some file in files1
-        dict2: used as a dictionary to determine dec from some file in files1
-        
+    :param files1: input list of all files in a directory in which to run astrometry.net
+    :param dict1: used as a dictionary to determine ra from some file in files1
+    :param dict2: used as a dictionary to determine dec from some file in files1
     """
+    # set precision for decimal objects to 2 decimal points.
+    getcontext().prec = 2
+    # Script used in check_call to run astrometry.net as a process.
+    script1 = 'solve-field --use-sextractor --overwrite --no-plots --ra %s --dec %s --radius 5 "%s"'
+    # instantiate TargetData class
+    td = Target_Data.TargetData()
     script_len = len(script1)
     timeoutlist_file = open(files1[0].split('.', 1)[0] + '_timeout.txt', 'a')
-    timeout_time = 90
+    timeout_time = 30
 
     # Following conditional determines whether script1 is a valid script for use in this program.
     if '--ra' not in script1:
@@ -105,5 +74,4 @@ def script_loop(script1, files1, dict1, dict2):
             raise
     timeoutlist_file.close()
 
-print(script_loop(script, fits_files, RA_dict, dec_dict))
 

@@ -53,12 +53,12 @@ for file in glob.glob('*'):
 # stacked astrometized files
 stacking.swarp()
 
-# move stacked fits and weights to respective directories
+# move stacked fits and delete weights
 for stacked in glob.glob('*.fit*'):
-
     if stacked in glob.glob('*.weight.fit*'):
-        shutil.move(config.stacking_directory + stacked,
-                    config.stacking_directory + '/weights/' + stacked)
+        os.remove(config.stacking_directory + stacked)
+        # shutil.move(config.stacking_directory + stacked,
+        #             config.stacking_directory + '/weights/' + stacked)
     else:
         shutil.move(config.stacking_directory + stacked,
                     config.sex_directory + stacked)

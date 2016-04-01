@@ -25,6 +25,7 @@ class WriteFileStatus(Connection):
     Inherits from Connection class.  Uses cursor function to insert data into
     file_status table in the research_phot database.
     """
+
     def __init__(self):
         pass
 
@@ -51,6 +52,3 @@ class WriteFileStatus(Connection):
             raise
         finally:
             db_connection.close()
-
-
-

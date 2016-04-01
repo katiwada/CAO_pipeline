@@ -1,5 +1,5 @@
 from decimal import *
-from subprocess import CalledProcessError, check_call, TimeoutExpired
+from subprocess import CalledProcessError, check_call, TimeoutExpired, Popen, PIPE
 import Target_Data
 
 
@@ -55,23 +55,14 @@ def script_loop(files1, dict1, dict2):
             ra_angle = str(ra_decimal * 15)
 
             check_call([script1 % (ra_angle, dec, i)], shell=True, timeout=timeout_time)
-            print('Success for file ' + i)
+
         except AttributeError:
             print('AttributeError: Filename: ' + i + '. Check to see if target exists in target_data.txt')
-            raise
         except KeyboardInterrupt:
             print('Halted')
             break
-        except CalledProcessError:
-            print('CallProcessError for File name: ' + i + '  ra: ' + ra_angle + '  dec: ' + dec +
-                  '.  Please check installation of astrometry.net.')
         except TimeoutExpired:
             # populate timeout list with file names of files that timed out during astrometrization
             timeoutlist_file.write(i + ' terminated after ' + str(timeout_time) + ' seconds.')
             timeoutlist_file.write('\n')
-        except:
-            print('File name: ' + i + '  ra: ' + ra_angle + '  dec: ' + dec)
-            raise
     timeoutlist_file.close()
-
-

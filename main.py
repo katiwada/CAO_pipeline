@@ -1,4 +1,4 @@
-import Astrometry_automation
+import astrometry
 import stacking
 import sex_auto
 import Get_files
@@ -33,7 +33,7 @@ dec_dict = td.target_dict(target_name, target_dec)
 os.chdir(config.astrometry_directory)
 
 # Run astronomy.net
-print(Astrometry_automation.script_loop(fits_files, RA_dict, dec_dict))
+astrometry.astro_pipe(fits_files, RA_dict, dec_dict)
 
 for new in glob.glob('*.new'):
     shutil.move(config.astrometry_directory + new,
@@ -80,10 +80,3 @@ for sexed in glob.glob('*.cat'):
 for stacked in glob.glob('*.fit*'):
     shutil.move(config.sex_directory + stacked,
                 config.finished_stacked + stacked)
-
-
-
-
-
-
-

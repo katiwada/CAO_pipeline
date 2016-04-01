@@ -157,4 +157,4 @@ def subdir_chgname(dir, old, new):
     return True
 
 # subdir_chgname(dir='/Users/jaredhand/Documents/bllac/2010/', old='BL Lacertae', new='BL Lac')
-# subdir_adddate(dir='/Users/jaredhand/Documents/bllac/2010/')
+# subdir_adddate(dir='/Users/jaredhand/Documents/3c279/2012/')

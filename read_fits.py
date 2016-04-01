@@ -52,7 +52,7 @@ def get_filter(list1):
             third = second.replace('\'', '')
             fitsfilter = third.strip()
             for filt in valid_filters:
-                if filt==fitsfilter:
+                if filt == fitsfilter:
                     return filt
     return False
 

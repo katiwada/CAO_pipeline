@@ -3,7 +3,6 @@ import config
 
 
 class TargetData:
-
     # target_data provides a list of targets used to specify RA and Dec for a given .fits file's target object.
     # NOTE: data in this array is of type Byte.
     target_data = np.loadtxt(fname=config.target_data + 'target_data.txt',

@@ -56,7 +56,7 @@ def haversine(ra1, dec1, ra2, dec2, radius=1):
 
     delta_ra = abs(rad_ra2 - rad_ra1)
     delta_dec = abs(rad_dec2 - rad_dec1)
-    value = np.sqrt((np.sin(delta_dec / 2)**2) + np.cos(rad_ra1) * np.cos(rad_ra2) * (np.sin(delta_ra / 2)**2))
+    value = np.sqrt((np.sin(delta_dec / 2) ** 2) + np.cos(rad_ra1) * np.cos(rad_ra2) * (np.sin(delta_ra / 2) ** 2))
     return np.arcsin(value) * 2 * radius
 
 
@@ -167,6 +167,7 @@ def mag_fit(ref_source, cat, filt):
                 ref_fluxerr.append((t[3]))
     lin_fit = np.polyfit(x=ref_flux, y=ref_mag, deg=1)
     return [cat, source, ref_list, lin_fit, ref_flux, ref_mag, ref_fluxerr, ref_magerr]
+
 
 # User specifies filename information
 os.chdir(config.blazar_photometry)

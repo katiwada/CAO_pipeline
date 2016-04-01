@@ -156,5 +156,16 @@ def subdir_chgname(dir, old, new):
                     raise
     return True
 
+
+def get_name(list1):
+    list1_len = len(list1)
+    new_list = []
+    for f in range(list1_len):
+        old = list1[f]
+        new = old.split('.', 1)[0]
+        new_list.append(new)
+    return new_list
+
+
 # subdir_chgname(dir='/Users/jaredhand/Documents/bllac/2010/', old='BL Lacertae', new='BL Lac')
 # subdir_adddate(dir='/Users/jaredhand/Documents/3c279/2012/')

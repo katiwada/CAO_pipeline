@@ -2,7 +2,9 @@ import decimal
 import Target_Data
 import subprocess
 import psutil as ps
-
+import Get_files
+import config
+import glob
 
 def kill_old():
     """
@@ -32,6 +34,15 @@ def kill_old():
         raise
 
 
+def find_failed():
+    fits = Get_files.check_files(config.astrometry_directory)
+    new = glob.glob('*.new')
+    fits_names = set(Get_files.get_name(list1=fits))
+    new_names = set(Get_files.get_name(list1=new))
+    failed = fits_names.difference(new_names)
+    return list(failed)
+
+
 def astro_pipe(files, dict1, dict2):
     """
     Runs astrometry.net on input file.  ra and dec are modified to be used in check_call method that
@@ -40,7 +51,7 @@ def astro_pipe(files, dict1, dict2):
         solve-field --use-sextractor --overwrite --downsample <int> --ra <degrees>
         --dec <degrees> --radius <arcminutes> 'filename'
 
-    :param file: input file in which to run astrometry.net on
+    :param files: input files in which to run astrometry.net on
     :param dict1: used as a dictionary to determine ra from some file
     :param dict2: used as a dictionary to determine dec from some file
     """
@@ -81,4 +92,9 @@ def astro_pipe(files, dict1, dict2):
             print('File name: ' + i + '  ra: ' + ra_angle + '  dec: ' + dec)
             timeoutlist_file.close()
             raise
+
+    failed_files = find_failed()
+    for failed in failed_files:
+        timeoutlist_file.write((failed + ' did not succeed'))
+        timeoutlist_file.write('\n')
     timeoutlist_file.close()

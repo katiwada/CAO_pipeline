@@ -6,6 +6,7 @@ import Get_files
 import config
 import glob
 
+
 def kill_old():
     """
     Checks to see if there are old astrometry-engine processes still running.  If there are, they are terminated.
@@ -59,7 +60,7 @@ def astro_pipe(files, dict1, dict2):
     decimal.getcontext().prec = 2
 
     # Script used in check_call to run astrometry.net as a process.
-    script1 = 'solve-field --use-sextractor --overwrite --no-plots --no-fits2fits --ra %s --dec %s --radius 5 "%s"'
+    script1 = 'solve-field --use-sextractor --overwrite --no-plots --ra %s --dec %s --radius 5 "%s"'
 
     # instantiate TargetData class
     td = Target_Data.TargetData()
@@ -98,3 +99,24 @@ def astro_pipe(files, dict1, dict2):
         timeoutlist_file.write((failed + ' did not succeed'))
         timeoutlist_file.write('\n')
     timeoutlist_file.close()
+
+
+def wcs_header_merge(files, wcs):
+    """
+    Merges wcs solution from astrometry.net with old fits file to create new fits file
+    :param files: list of fits files
+    :param wcs: list of wcs solutions from astrometry.net
+    :return:
+    """
+    script = 'new-wcs -i %s -w %s -o %s -d'
+    for file in files:
+        f_name = file.split('.', 1)[0]
+        for w in wcs:
+            w_name = w.split('.', 1)[0]
+            if f_name == w_name:
+                new_file = f_name + '_wcs.fits'
+                try:
+                    subprocess.run(script % (file, w, new_file), shell=True)
+                except:
+                    raise
+

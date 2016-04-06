@@ -167,5 +167,5 @@ def get_name(list1):
     return new_list
 
 
-# subdir_chgname(dir='/Users/jaredhand/Documents/bllac/2010/', old='BL Lacertae', new='BL Lac')
-# subdir_adddate(dir='/Users/jaredhand/Documents/3c279/2012/')
+# subdir_chgname(dir='/Users/jaredhand/Documents/sources/ao0235/2011/', old='AO_0235', new='AO_0235+164')
+# subdir_adddate(dir='/Users/jaredhand/Documents/sources/ao0235/2011/')

@@ -34,21 +34,20 @@ os.chdir(config.astrometry_directory)
 
 # Run astronomy.net
 astrometry.astro_pipe(fits_files, RA_dict, dec_dict)
+# merge wcs header with old fits files
+wcs_list = glob.glob('*.wcs')
+astrometry.wcs_header_merge(files=fits_files, wcs=wcs_list)
 
-for new in glob.glob('*.new'):
-    shutil.move(config.astrometry_directory + new,
-                config.stacking_directory + new)
+for fits in glob.glob('*.fits'):
+    shutil.move(config.astrometry_directory + fits,
+                config.stacking_directory + fits)
 # move timeout lists
 for file in glob.glob('*_timeout.txt*'):
     shutil.move(config.astrometry_directory + file,
                 config.pipeline_root + 'timeout_lists/' + file)
 # Remove clutter created by astrometry.net
-new = glob.glob('*.new*')
 for file in glob.glob('*'):
-    if file in new:
-        pass
-    else:
-        os.remove(config.astrometry_directory + file)
+    os.remove(config.astrometry_directory + file)
 
 # stacked astrometized files
 stacking.swarp()
@@ -59,14 +58,14 @@ for stacked in glob.glob('*.fit*'):
         os.remove(config.stacking_directory + stacked)
         # shutil.move(config.stacking_directory + stacked,
         #             config.stacking_directory + '/weights/' + stacked)
-    else:
+    elif stacked in glob.glob('*_st.fit*'):
         shutil.move(config.stacking_directory + stacked,
                     config.sex_directory + stacked)
 # remove lists used by swarp
 for file in glob.glob('*_list.txt*'):
     os.remove(config.stacking_directory + file)
 # remove *.new files created by astrometry.net
-for file in glob.glob('*.new'):
+for file in glob.glob('*.fit*'):
     os.remove(config.stacking_directory + file)
 
 # run SExtractor on stacked files

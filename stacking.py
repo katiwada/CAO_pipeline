@@ -10,7 +10,7 @@ def swarp():
     script = 'swarp -COPY_KEYWORDS \'FILTER\',\'DATE-OBS\' -IMAGEOUT_NAME %s -WEIGHTOUT_NAME %s @%s'
     # grab all astrometretized files
     os.chdir(config.stacking_directory)
-    astro_files = glob.glob('*.new')
+    astro_files = glob.glob('*.fits')
 
     # empty dictionary that will be populated with file names that share filters
     filt_dict = {}
@@ -69,7 +69,7 @@ def swarp():
                         fits_list.write(file)
                         fits_list.write('\n')
                     fits_list.close()
-                    swarp_script = script % (cat_name + '.fits', cat_name + '.weight.fits', cat_name + '_list.txt')
+                    swarp_script = script % (cat_name + '_st.fits', cat_name + '.weight.fits', cat_name + '_list.txt')
                     sp.check_call(args=swarp_script, shell=True)
                 except:
                     raise

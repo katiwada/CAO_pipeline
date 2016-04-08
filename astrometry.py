@@ -9,30 +9,21 @@ import glob
 
 def kill_old():
     """
-    Checks to see if there are old astrometry-engine processes still running.  If there are, they are terminated.
+    Checks to see if there is an astrometry-engine process still running.  If there is, it is terminated.
     :return:
     """
     try:
-        astrometry_engine_dict = {}
-        # key: cpu create time; value: proc ID
         for p in ps.pids():
             if ps.Process(p).name() == 'astrometry-engine':
-                astrometry_engine_dict[ps.Process(p).create_time()] = p
-            else:
-                pass
-        if len(astrometry_engine_dict) > 1:
-            old_engine_time = max(astrometry_engine_dict.keys())
-            old_engine = ps.Process(astrometry_engine_dict.get(key=old_engine_time))
-            old_engine.terminate()
-            return True
+                ps.Process(p).terminate()
+                break
     except ps.ZombieProcess:
-        return False
         pass
     except ps.NoSuchProcess:
         pass
-        return False
     except:
         raise
+    return True
 
 
 def find_failed():
@@ -60,16 +51,15 @@ def astro_pipe(files, dict1, dict2):
     decimal.getcontext().prec = 2
 
     # Script used in check_call to run astrometry.net as a process.
-    script1 = 'solve-field --use-sextractor --overwrite --no-plots --ra %s --dec %s --radius 5 "%s"'
+    script1 = 'solve-field --use-sextractor --overwrite --no-plots --no-remove-lines --ra %s --dec %s --radius 5 "%s"'
 
     # instantiate TargetData class
     td = Target_Data.TargetData()
 
     script_len = len(script1)
     timeoutlist_file = open(files[0].split('.', 1)[0] + '_timeout.txt', 'a')
-    timeout_time = 10
+    timeout_time = 20
     for i in files:
-        kill_old()
         try:
             # note that ra is returned in hour angles.
             ra = td.coord_lookup(i, dict1)
@@ -89,6 +79,7 @@ def astro_pipe(files, dict1, dict2):
             # populate timeout list with file names of files that timed out during astrometrization
             timeoutlist_file.write(i + ' terminated after ' + str(timeout_time) + ' seconds.')
             timeoutlist_file.write('\n')
+            kill_old()
         except:
             print('File name: ' + i + '  ra: ' + ra_angle + '  dec: ' + dec)
             timeoutlist_file.close()

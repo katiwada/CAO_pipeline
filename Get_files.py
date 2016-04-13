@@ -168,4 +168,4 @@ def get_name(list1):
 
 
 # subdir_chgname(dir='/Users/jaredhand/Documents/sources/3c454dot3/2014/', old='3C 454.3', new='3C_454dot3')
-# subdir_adddate(dir='/Users/jaredhand/Documents/sources/3c454dot3/2011/')
+# subdir_adddate(dir='/Users/jaredhand/Documents/sources/cta102/2012/')

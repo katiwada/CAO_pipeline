@@ -2,10 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="abe3ded0-dc4c-42c6-8799-c88f47eb79f8" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ref_cats.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Get_files.py" afterPath="$PROJECT_DIR$/Get_files.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/astrometry.py" afterPath="$PROJECT_DIR$/astrometry.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target_data.txt" afterPath="$PROJECT_DIR$/target_data.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/blazar_photometry.py" afterPath="$PROJECT_DIR$/blazar_photometry.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/read_fits.py" afterPath="$PROJECT_DIR$/read_fits.py" />
     </list>
     <ignored path="Automation_Project.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -82,12 +83,36 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="target_data.txt" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/target_data.txt">
+      <file leaf-file-name="blazar_photometry.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/blazar_photometry.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.7266436">
-              <caret line="70" column="22" selection-start-line="70" selection-start-column="22" selection-end-line="70" selection-end-column="22" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="160" column="18" selection-start-line="160" selection-start-column="18" selection-end-line="160" selection-end-column="18" />
+              <folding>
+                <element signature="e#0#9#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ref_cats.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/ref_cats.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.766436">
+              <caret line="55" column="53" selection-start-line="55" selection-start-column="53" selection-end-line="55" selection-end-column="53" />
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="read_fits.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/read_fits.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="62" column="26" selection-start-line="62" selection-start-column="26" selection-end-line="62" selection-end-column="26" />
+              <folding>
+                <element signature="e#0#9#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -95,31 +120,11 @@
       <file leaf-file-name="TEST.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/TEST.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="33" column="50" selection-start-line="33" selection-start-column="50" selection-end-line="33" selection-end-column="50" />
+            <state vertical-scroll-proportion="-15.407408">
+              <caret line="50" column="5" selection-start-line="50" selection-start-column="5" selection-end-line="50" selection-end-column="5" />
               <folding>
                 <element signature="e#0#22#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="blazar_photometry.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/blazar_photometry.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="202" column="34" selection-start-line="202" selection-start-column="34" selection-end-line="202" selection-end-column="34" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Target_Data.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Target_Data.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="38" column="21" selection-start-line="38" selection-start-column="21" selection-end-line="38" selection-end-column="21" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -144,8 +149,6 @@
         <option value="$PROJECT_DIR$/notebooks/stacking.py" />
         <option value="/anaconda/envs/Anaconda3/lib/python3.4/site-packages/astropy/io/fits/hdu/hdulist.py" />
         <option value="$PROJECT_DIR$/Target_Data.py" />
-        <option value="$PROJECT_DIR$/read_fits.py" />
-        <option value="$PROJECT_DIR$/blazar_photometry.py" />
         <option value="$PROJECT_DIR$/sex_auto.py" />
         <option value="$PROJECT_DIR$/config.py" />
         <option value="/usr/local/bin/image2pnm.py" />
@@ -153,17 +156,21 @@
         <option value="/usr/local/astrometry/bin/image2pnm.py" />
         <option value="$PROJECT_DIR$/Astrometry_automation.py" />
         <option value="/usr/local/astrometry/lib/python/astrometry/util/fits2fits.py" />
-        <option value="$PROJECT_DIR$/TEST.py" />
         <option value="$PROJECT_DIR$/stacking.py" />
         <option value="$PROJECT_DIR$/main.py" />
         <option value="$PROJECT_DIR$/astrometry.py" />
+        <option value="$PROJECT_DIR$/ref_cats.py" />
         <option value="$PROJECT_DIR$/Get_files.py" />
+        <option value="$PROJECT_DIR$/read_fits.py" />
+        <option value="$PROJECT_DIR$/TEST.py" />
+        <option value="$PROJECT_DIR$/blazar_photometry.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="y" value="23" />
-    <option name="width" value="1920" />
+    <option name="x" value="-3" />
+    <option name="y" value="35" />
+    <option name="width" value="1853" />
     <option name="height" value="975" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
@@ -269,24 +276,7 @@
       <recent name="$PROJECT_DIR$" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.Get_files">
-    <configuration default="false" name="sex_auto" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="Automation_Project" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/sex_auto.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <method />
-    </configuration>
+  <component name="RunManager" selected="Python.blazar_photometry">
     <configuration default="false" name="read_fits" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -351,6 +341,23 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="Automation_Project" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/TEST.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <method />
+    </configuration>
+    <configuration default="false" name="blazar_photometry" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="Automation_Project" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/blazar_photometry.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <method />
@@ -516,19 +523,19 @@
     </configuration>
     <list size="6">
       <item index="0" class="java.lang.String" itemvalue="Python.Astrometry_automation" />
-      <item index="1" class="java.lang.String" itemvalue="Python.sex_auto" />
-      <item index="2" class="java.lang.String" itemvalue="Python.read_fits" />
-      <item index="3" class="java.lang.String" itemvalue="Python.main" />
-      <item index="4" class="java.lang.String" itemvalue="Python.Get_files" />
-      <item index="5" class="java.lang.String" itemvalue="Python.TEST" />
+      <item index="1" class="java.lang.String" itemvalue="Python.read_fits" />
+      <item index="2" class="java.lang.String" itemvalue="Python.main" />
+      <item index="3" class="java.lang.String" itemvalue="Python.Get_files" />
+      <item index="4" class="java.lang.String" itemvalue="Python.TEST" />
+      <item index="5" class="java.lang.String" itemvalue="Python.blazar_photometry" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Python.Get_files" />
+        <item index="0" class="java.lang.String" itemvalue="Python.blazar_photometry" />
         <item index="1" class="java.lang.String" itemvalue="Python.TEST" />
-        <item index="2" class="java.lang.String" itemvalue="Python.main" />
-        <item index="3" class="java.lang.String" itemvalue="Python.read_fits" />
-        <item index="4" class="java.lang.String" itemvalue="Python.sex_auto" />
+        <item index="2" class="java.lang.String" itemvalue="Python.Get_files" />
+        <item index="3" class="java.lang.String" itemvalue="Python.main" />
+        <item index="4" class="java.lang.String" itemvalue="Python.read_fits" />
       </list>
     </recent_temporary>
   </component>
@@ -669,7 +676,13 @@
       <option name="project" value="LOCAL" />
       <updated>1459963225930</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="fixed kill_old() in astrometry.py so that it actually kills a rogue astrometry-engine process.  Changed the name of 3c 454.3 to 3c 454dot3 for good reasons.">
+      <created>1460123406252</created>
+      <option name="number" value="00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1460123406252</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="TodoView">
@@ -682,16 +695,16 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1920" height="975" extended-state="6" />
-    <editor active="true" />
+    <frame x="-3" y="35" width="1853" height="975" extended-state="0" />
+    <editor active="false" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21831736" sideWeight="0.49434572" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16013253" sideWeight="0.49434572" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3295583" sideWeight="0.5" order="11" side_tool="false" content_ui="combo" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3137033" sideWeight="0.5063898" order="3" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3137033" sideWeight="0.5061928" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.29671574" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.16534542" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3137033" sideWeight="0.49361023" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3137033" sideWeight="0.49380723" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.36261982" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" x="-25" y="353" width="1899" height="275" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.16400427" sideWeight="0.5056543" order="2" side_tool="true" content_ui="tabs" />
@@ -738,7 +751,8 @@
     <MESSAGE value="wrote new script for astrometry automation.  Deprecated Astrometry_Automation.py as it has been replaced by astrometry.py" />
     <MESSAGE value="added functionality to write files that failed for astrometry.net but did not time out." />
     <MESSAGE value="modified code to merge wcs header with original fits.  Also changed main.py to reflect this and modified glob call in stacking.py from *.new to *.fits" />
-    <option name="LAST_COMMIT_MESSAGE" value="modified code to merge wcs header with original fits.  Also changed main.py to reflect this and modified glob call in stacking.py from *.new to *.fits" />
+    <MESSAGE value="fixed kill_old() in astrometry.py so that it actually kills a rogue astrometry-engine process.  Changed the name of 3c 454.3 to 3c 454dot3 for good reasons." />
+    <option name="LAST_COMMIT_MESSAGE" value="fixed kill_old() in astrometry.py so that it actually kills a rogue astrometry-engine process.  Changed the name of 3c 454.3 to 3c 454dot3 for good reasons." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -752,7 +766,7 @@
           </properties>
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="60" />
+      <option name="time" value="86" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -1036,14 +1050,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/read_fits.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="1.4273356">
-          <caret line="56" column="16" selection-start-line="56" selection-start-column="16" selection-end-line="56" selection-end-column="16" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/config.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1084,6 +1090,24 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="67" column="29" selection-start-line="67" selection-start-column="29" selection-end-line="67" selection-end-column="29" />
+          <folding>
+            <element signature="e#0#17#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/target_data.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.3321234">
+          <caret line="34" column="5" selection-start-line="34" selection-start-column="0" selection-end-line="34" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/sex_auto.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1102,16 +1126,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/main.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="67" column="29" selection-start-line="67" selection-start-column="29" selection-end-line="67" selection-end-column="29" />
-          <folding>
-            <element signature="e#0#17#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/astrometry.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1119,24 +1133,6 @@
           <folding>
             <element signature="e#0#14#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/TEST.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="33" column="50" selection-start-line="33" selection-start-column="50" selection-end-line="33" selection-end-column="50" />
-          <folding>
-            <element signature="e#0#22#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/blazar_photometry.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="202" column="34" selection-start-line="202" selection-start-column="34" selection-end-line="202" selection-end-column="34" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1148,10 +1144,40 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/target_data.txt">
+    <entry file="file://$PROJECT_DIR$/TEST.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.7266436">
-          <caret line="70" column="22" selection-start-line="70" selection-start-column="22" selection-end-line="70" selection-end-column="22" />
+        <state vertical-scroll-proportion="-15.407408">
+          <caret line="50" column="5" selection-start-line="50" selection-start-column="5" selection-end-line="50" selection-end-column="5" />
+          <folding>
+            <element signature="e#0#22#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/read_fits.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="62" column="26" selection-start-line="62" selection-start-column="26" selection-end-line="62" selection-end-column="26" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/blazar_photometry.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="160" column="18" selection-start-line="160" selection-start-column="18" selection-end-line="160" selection-end-column="18" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ref_cats.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.766436">
+          <caret line="55" column="53" selection-start-line="55" selection-start-column="53" selection-end-line="55" selection-end-column="53" />
           <folding />
         </state>
       </provider>

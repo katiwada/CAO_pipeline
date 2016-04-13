@@ -10,7 +10,7 @@ accessible when using astropy.io.
 """
 
 # valid filters from data
-valid_filters = ['U', 'V', 'R', 'I']
+valid_filters = ['B', 'V', 'R', 'I']
 
 
 def decode_fitshead(file1, cwd=None):

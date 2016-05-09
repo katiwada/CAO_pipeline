@@ -155,10 +155,12 @@ def mag_fit(ref_source, cat, filt):
             if s == t[0]:
                 ref_flux.append(t[2])
                 ref_fluxerr.append((t[3]))
-    # print(ref_list)
-    # print(ref_flux)
-    # print(np.log(ref_flux))
+    print(source)
+    print(ref_list)
+    print(ref_flux)
+    print(np.log(ref_flux))
     lin_fit = np.polyfit(x=np.log10(ref_flux), y=ref_mag, deg=1)
+    print(lin_fit)
     return [cat, source, ref_list, lin_fit, ref_flux, ref_mag, ref_fluxerr, ref_magerr]
 
 
@@ -172,17 +174,10 @@ def mag_err(flux, fit):
 os.chdir(config.blazar_photometry)
 cat_list = glob.glob('*.cat')
 # ref_source_input = input('Enter ref_source: ')
-ref_source_input = 'ref_3c279'
+ref_source_input = 'ref_mrk501'
 year_input = input('Enter year: ')
-ref_source_data = np.copy(ref_cats.ref_3c279)
-"""
-# determine which array to use as reference source
-global ref_source_data
-if ref_source_input == 'bllac_ref':
-    ref_source_data = np.copy(bllac_ref)
-elif ref_source_input == 'mrk501_ref':
-    ref_source_data = np.copy(mrk501_ref)
-"""
+ref_source_data = np.copy(ref_cats.ref_mrk501)
+
 # loop to create .txt files containing all data(verbose_file) and data for plotting(data_file)
 for catalog in cat_list:
     os.chdir(config.blazar_photometry)

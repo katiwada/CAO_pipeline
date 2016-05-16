@@ -1,8 +1,8 @@
 import decimal
-import Target_Data
+import target_data
 import subprocess
 import psutil as ps
-import Get_files
+import get_files
 import config
 import glob
 
@@ -10,7 +10,7 @@ import glob
 def kill_old():
     """
     Checks to see if there is an astrometry-engine process still running.  If there is, it is terminated.
-    :return:
+    :return: True unless unhandled exception is raised
     """
     try:
         for p in ps.pids():
@@ -27,10 +27,14 @@ def kill_old():
 
 
 def find_failed():
-    fits = Get_files.check_files(config.astrometry_directory)
+    """
+    Finds all fits files in astrometry_directory that do not have corresponding .new files from astrometry.net.
+    :return: list of failed fits files
+    """
+    fits = get_files.check_files(config.astrometry_directory)
     new = glob.glob('*.new')
-    fits_names = set(Get_files.get_name(list1=fits))
-    new_names = set(Get_files.get_name(list1=new))
+    fits_names = set(get_files.get_name(list1=fits))
+    new_names = set(get_files.get_name(list1=new))
     failed = fits_names.difference(new_names)
     return list(failed)
 
@@ -54,7 +58,7 @@ def astro_pipe(files, dict1, dict2):
     script1 = 'solve-field --use-sextractor --overwrite --no-plots --no-remove-lines --ra %s --dec %s --radius 5 "%s"'
 
     # instantiate TargetData class
-    td = Target_Data.TargetData()
+    td = target_data.TargetData()
 
     script_len = len(script1)
     timeoutlist_file = open(files[0].split('.', 1)[0] + '_timeout.txt', 'a')
@@ -97,7 +101,7 @@ def wcs_header_merge(files, wcs):
     Merges wcs solution from astrometry.net with old fits file to create new fits file
     :param files: list of fits files
     :param wcs: list of wcs solutions from astrometry.net
-    :return:
+    :return: True unless unhandled exception is raised
     """
     script = 'new-wcs -i %s -w %s -o %s -d'
     for file in files:
@@ -110,4 +114,5 @@ def wcs_header_merge(files, wcs):
                     subprocess.run(script % (file, w, new_file), shell=True)
                 except:
                     raise
+    return True
 

@@ -1,6 +1,6 @@
 import os
 import glob
-from subprocess import CalledProcessError, check_call
+import subprocess as sp
 from astropy.io import fits
 
 
@@ -17,8 +17,9 @@ def check_files(user_input):
         os.chdir(user_input)
         if glob.glob('*.gz*'):
             try:
-                check_call('gunzip *.gz', shell=True)
-            except CalledProcessError:
+                sp.check_call('gunzip *.gz', shell=True)
+            except sp.CalledProcessError:
+                # this exception is raised if gunzip has no files to unzip.  As a result, it is ignored.
                 pass
         for files in file_ext:
             data_files += glob.glob(files)

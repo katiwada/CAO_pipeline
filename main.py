@@ -1,9 +1,9 @@
 import astrometry
 import stacking
 import sex_auto
-import Get_files
+import get_files
 import config
-import Target_Data
+import target_data
 import os
 import shutil
 import glob
@@ -11,13 +11,13 @@ import glob
 # initialize fits_files variable as a list of fits files at input directory.
 while True:
     cwd = config.astrometry_directory
-    fits_files = Get_files.check_files(cwd)
-    no_space = Get_files.rm_spaces(fits_files)
+    fits_files = get_files.check_files(cwd)
+    no_space = get_files.rm_spaces(fits_files)
     if no_space:
         break
 
 # Instantiate TargetData class.
-td = Target_Data.TargetData()
+td = target_data.TargetData()
 # All values from target_data are Byte data type.
 target_name = td.target_data[:, 0].tolist()
 target_RA = td.target_data[:, 1].tolist()

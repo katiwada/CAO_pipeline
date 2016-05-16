@@ -1,8 +1,6 @@
 import subprocess as sp
 import os
-import glob
-import shutil
-import Get_files
+import get_files
 import config
 
 
@@ -17,7 +15,7 @@ def sex_call():
     os.chdir(config.sex_directory)
     # str for sextractor script
     script = 'sex -CATALOG_NAME %s %s'
-    files = Get_files.get_files()
+    files = get_files.get_files()
     if not files:
         print('No .fit or .FIT files in /data_in folder.')
         return False

@@ -1,6 +1,6 @@
 import decimal
 import target_data
-import subprocess
+import subprocess as sp
 import psutil as ps
 import get_files
 import config
@@ -57,11 +57,12 @@ def astro_pipe(files, dict1, dict2):
     # Script used in check_call to run astrometry.net as a process.
     script1 = 'solve-field --use-sextractor --overwrite --no-plots --no-remove-lines --ra %s --dec %s --radius 5 "%s"'
 
+    # these following list is used to populate timed out and fail logs along with fail_list defined below.
+    timeout_list = []
+
     # instantiate TargetData class
     td = target_data.TargetData()
 
-    script_len = len(script1)
-    timeoutlist_file = open(files[0].split('.', 1)[0] + '_timeout.txt', 'a')
     timeout_time = 20
     for i in files:
         try:
@@ -75,25 +76,21 @@ def astro_pipe(files, dict1, dict2):
             ra_decimal = decimal.Decimal(ra)
             ra_angle = str(ra_decimal * 15)
 
-            subprocess.run(script1 % (ra_angle, dec, i), shell=True, timeout=timeout_time)
+            sp.run(script1 % (ra_angle, dec, i), shell=True, timeout=timeout_time)
 
         except KeyboardInterrupt:
             print('Halted')
-        except subprocess.TimeoutExpired:
-            # populate timeout list with file names of files that timed out during astrometrization
-            timeoutlist_file.write(i + ' terminated after ' + str(timeout_time) + ' seconds.')
-            timeoutlist_file.write('\n')
+        except sp.TimeoutExpired:
+            timeout_list.append(i)
             kill_old()
         except:
             print('File name: ' + i + '  ra: ' + ra_angle + '  dec: ' + dec)
-            timeoutlist_file.close()
             raise
 
-    failed_files = find_failed()
-    for failed in failed_files:
-        timeoutlist_file.write((failed + ' did not succeed'))
-        timeoutlist_file.write('\n')
-    timeoutlist_file.close()
+    # Used along with timeout_list to log all files that failed/timed out during astrometrization
+    fail_list = find_failed()
+
+    # a function will be added here that will create a timeout and failed file log.  Kati is working on this.
 
 
 def wcs_header_merge(files, wcs):

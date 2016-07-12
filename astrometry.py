@@ -92,11 +92,15 @@ def astro_pipe(files, dict1, dict2):
 
     # a function will be added here that will create a timeout and failed file log.  Kati is working on this.
     # @edit Kati Wada working progress...
+    from astropy.io import fits
+    hdulist = fits.open('input.fits')
+    fheader = hdulist[0].header['targname']
+    
     complete_fails = list(find_failed() - timeout_list) #separating out the complete files
     
     file = open('failntime.rtf', 'w') #creating a text file for lists
     
-    name = 'timeout' + timeout_time + date_obs + filter"""fits file header""" + newfilename
+    name = 'timeout' + timeout_time + date_obs + fheader + newfilename
     for list in timeout_list:
         file.write(name)
     for list in complete_fails:

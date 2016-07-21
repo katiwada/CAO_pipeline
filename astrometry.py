@@ -100,11 +100,11 @@ def astro_pipe(files, dict1, dict2):
     
     file = open('failntime.rtf', 'w') #creating a text file for lists
     
-    name = 'timeout' + timeout_time + date_obs + fheader + newfilename
+    name = timeout_time + date_obs + fheader + newfilename
     for list in timeout_list:
-        file.write(name)
+        file.write('timeout' + name)#writing in the file
     for list in complete_fails:
-        file.write('Complete Fail', date_obs, newfilename) 
+        file.write('Complete Fail' + name)#writing in the file 
     file.close()
 
 def wcs_header_merge(files, wcs):

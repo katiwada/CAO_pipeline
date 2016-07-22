@@ -5,6 +5,7 @@ import psutil as ps
 import get_files
 import config
 import glob
+from astropy.io import fits
 
 
 def kill_old():
@@ -92,7 +93,6 @@ def astro_pipe(files, dict1, dict2):
 
     # a function will be added here that will create a timeout and failed file log.  Kati is working on this.
     # @edit Kati Wada working progress...
-    from astropy.io import fits
     hdulist = fits.open('input.fits')
     fheader = hdulist[0].header['targname']
     
@@ -101,11 +101,12 @@ def astro_pipe(files, dict1, dict2):
     file = open('failntime.rtf', 'w') #creating a text file for lists
     
     name = timeout_time + date_obs + fheader + newfilename
-    for list in timeout_list:
+    for i in timeout_list:
         file.write('timeout' + name)#writing in the file
-    for list in complete_fails:
+    for i in complete_fails:
         file.write('Complete Fail' + name)#writing in the file 
     file.close()
+    hdulist.close()
 
 def wcs_header_merge(files, wcs):
     """

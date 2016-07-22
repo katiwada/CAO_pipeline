@@ -111,8 +111,8 @@ def astro_pipe(files, dict1, dict2):
     ffilter = hdulist[0].header['filter']
     date_obs = hdulist[0].header['date_obs']
         file1.write(i + ',' + '0' + ',' + date_obs + ',' + timeout_time + ',' + ffilter + ',' + fobject + '\n')#writing in the file 
-    file1.close()
-    hdulist.close()
+file1.close()
+hdulist.close()
 
 def wcs_header_merge(files, wcs):
     """

@@ -93,20 +93,25 @@ def astro_pipe(files, dict1, dict2):
 
     # a function will be added here that will create a timeout and failed file log.  Kati is working on this.
     # @edit Kati Wada working progress...
-    hdulist = fits.open('input.fits')
-    fheader = hdulist[0].header['targname']
-    ffilter = hdulist[0].header['filter']
     
     complete_fails = list(find_failed() - timeout_list) #separating out the complete files
     
-    file = open('failntime.rtf', 'w') #creating a text file for lists
+    file1 = open('failntime.rtf', 'w') #creating a text file for lists
     
-    name = timeout_time + date_obs + ffilter + fheader + newfilename
+    name = timeout_time + date_obs + filter + object
     for i in timeout_list:
-        file.write('timeout' + name)#writing in the file
+         hdulist = fits.open(i)
+    fobject = hdulist[0].header['object']
+    ffilter = hdulist[0].header['filter']
+    date_obs = hdulist[0].header['date_obs']
+        file1.write(i + ',' + '1' + ',' + date_obs + ',' + timeout_time + ',' + ffilter + ',' + fobject + '\n')#writing in the file
     for i in complete_fails:
-        file.write('Complete Fail' + name)#writing in the file 
-    file.close()
+         hdulist = fits.open(i)
+    fobject = hdulist[0].header['object']
+    ffilter = hdulist[0].header['filter']
+    date_obs = hdulist[0].header['date_obs']
+        file1.write(i + ',' + '0' + ',' + date_obs + ',' + timeout_time + ',' + ffilter + ',' + fobject + '\n')#writing in the file 
+    file1.close()
     hdulist.close()
 
 def wcs_header_merge(files, wcs):

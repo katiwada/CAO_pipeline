@@ -95,12 +95,13 @@ def astro_pipe(files, dict1, dict2):
     # @edit Kati Wada working progress...
     hdulist = fits.open('input.fits')
     fheader = hdulist[0].header['targname']
+    ffilter = hdulist[0].header['filter']
     
     complete_fails = list(find_failed() - timeout_list) #separating out the complete files
     
     file = open('failntime.rtf', 'w') #creating a text file for lists
     
-    name = timeout_time + date_obs + fheader + newfilename
+    name = timeout_time + date_obs + ffilter + fheader + newfilename
     for i in timeout_list:
         file.write('timeout' + name)#writing in the file
     for i in complete_fails:
